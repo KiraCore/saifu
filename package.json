@@ -1,0 +1,19 @@
+{
+  "name": "generator2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@cosmostation/cosmosjs": "^0.6.7",
+    "aes256": "^1.0.4",
+    "bip39": "^3.0.2",
+    "blakejs": "^1.1.0",
+    "crypto-js": "^4.0.0",
+    "packages": "0.0.8"
+  }
+}
