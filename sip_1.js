@@ -19,7 +19,7 @@ const memo = "memo message";
 const ecpairPriv = cosmos.getECPairPriv(mnemonic);
 //#endregion Cosmos
 const stdMsgData = [];
-checksum = "";
+var checksum = "";
 
 //  Encrypted passphrase
 var passphrase = blake.blake2bHex("abc");
@@ -57,7 +57,8 @@ cosmos.getAccounts(address, memo).then((data) => {
   // Serialize to convert it from object to string
   var serializedSignedTx = JSON.stringify(stdSignMsg);
   //console.log(serializedSignedTx);
-  // Shorten it
+
+  // Shorten the data into smaller size using base64
   base64encode(serializedSignedTx);
 });
 //#endregion
@@ -65,7 +66,7 @@ function base64encode(serializedSignedTx) {
   let objJsonB64 = Buffer.from(serializedSignedTx).toString("base64"); // another way is to use btoa()
   //console.log(objJsonB64);
   //  Generate a checksum of the data
-  checksum = SHA256(serializedSignedTx).toString();
+  checksum = SHA256(objJsonB64).toString();
   //console.log(checksum);
   //  Generate frames and is split by n character lengths e.g. 120
   createFrames(objJsonB64, 120);
@@ -118,31 +119,32 @@ function createFrames(value, splitValue) {
 }
 
 function decodeQRCode(value) {
+  var retrievedData = "";
+
+  // Sort's the frames in ascending order of page number
+  value.sort(function (a, b) {
+    return b.page - a.page;
+  });
+
+  // Once it is sorted, data about transcation is retrieved
+  for (i = 0; i < value.length; i++) {
+    // console.log(value[i].page);
+    retrievedData = retrievedData + value[i].data;
+  }
+
   //  Verify the integrity of the data via Checksum
-  if (checksum == value[0]["checksum"]) {
-    var retrieveData = "";
+  verifyChecksum = SHA256(retrievedData).toString();
 
-    // Sort's the frames in ascending order of page
-    value.sort(function (a, b) {
-      return b.page - a.page;
-    });
-    // Once it is sorted, data necessary is retrieved
-    for (i = 0; i < value.length; i++) {
-      // console.log(value[i].page);
-      retrieveData = retrieveData + value[i].data;
-    }
-
+  if (checksum == verifyChecksum) {
     // Decoded from base 64 to string
-    let decodebase64 = Buffer.from(retrieveData, "base64").toString();
-
+    let decodebase64 = Buffer.from(retrievedData, "base64").toString();
     // Converted back into an JSON object
     let dataObject = JSON.parse(decodebase64);
-
     // Retrieve Signature from mobile here
     const signedTx = cosmos.sign(dataObject, ecpairPriv);
     //  Propogate to the blockchain over RPC : broadCastStd{}
     cosmos.broadcast(signedTx).then((response) => console.log(response));
   } else {
-    //    Handle invalid checksum
+    // Data has been modified as checksum doesn't match
   }
 }
