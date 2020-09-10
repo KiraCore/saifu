@@ -1,16 +1,17 @@
-# saifu_mobile
+# saifu sip_2_mobile
+"*Dart/Flutter application capable of a PGP signing a text message of the arbitrary length and extend previously created web application mocking the logic to propagate and verify signed message.*" [here](https://github.com/KiraCore/docs/blob/master/spec/kira-signer/sip_2.md) 
 
-A new Flutter project.
+**Warning:** This is build using Flutter SDK, which is fairly new and hasn't achieved full web support yet, however we are still adapting it and make it very useful.
 
-## Getting Started
+Mobile implementation for scanning & generating bar-code and signing the data with a private key. This supports both android and IOS, requests permissions, and no need for specifying anything on Android (minimum support e.g.)
 
-This project is a starting point for a Flutter application.
+![Mobile implementation](https://imgur.com/BcX0oyY.png)
 
-A few resources to get you started if this is your first Flutter project:
+#### To get started:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+    flutter pub get
+    
+ Run it - For device (with developer mode connected with USB) or an launched android studio emulator.  No specific android version is required
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+    flutter run
+  
