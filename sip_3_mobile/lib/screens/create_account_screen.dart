@@ -10,6 +10,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:password_hash/salt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart';
+import 'introduction_screen.dart';
 
 class CreateAccount extends StatefulWidget {
   @override
@@ -198,6 +199,10 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                   SharedPreferences prefs = await SharedPreferences.getInstance();
                   await prefs.setString('name', _name);
                   await storage.write(key: "passwordhash", value: hash.toString());
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => Introduction(
+                            ethvatar: ethvatar,
+                          )));
                 } catch (e) {
                   print('Failed with error code: ${e.code}');
                   print(e.message);

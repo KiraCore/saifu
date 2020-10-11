@@ -31,6 +31,7 @@ dependencies:
   introduction_screen: ^1.0.9
   jdenticon_dart: ^1.2.1+1
   local_auth: ^0.6.3+2
+  openpgp: ^0.9.9
   password_hash: ^2.0.0
   shared_preferences: ^0.5.12
 
