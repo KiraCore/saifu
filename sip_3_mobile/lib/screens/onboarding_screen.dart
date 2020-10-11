@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
+import 'create_account_screen.dart';
+
 class OnBoarding extends StatefulWidget {
   @override
   _OnBoardingState createState() => _OnBoardingState();
@@ -11,7 +13,7 @@ class _OnBoardingState extends State<OnBoarding> {
 
   void _onIntroEnd(context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => null),
+      MaterialPageRoute(builder: (_) => CreateAccount()),
     );
   }
 
