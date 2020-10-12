@@ -23,7 +23,6 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     controller.dispose();
     super.dispose();
   }

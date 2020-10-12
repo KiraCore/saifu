@@ -1,7 +1,6 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sip_3_mobile/screens/main_interface_screen.dart';
 import 'screens/onboarding_screen.dart';
 
 void main() {

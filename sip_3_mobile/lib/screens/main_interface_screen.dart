@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:sip_3_mobile/constants.dart';
+import 'package:sip_3_mobile/widgets/network_account_widget.dart';
 import 'package:sip_3_mobile/screens/qr_code_screen.dart';
 
 class MainInterface extends StatelessWidget {
@@ -11,12 +13,14 @@ class MainInterface extends StatelessWidget {
       backgroundColor: greys,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        centerTitle: true,
         elevation: 0.0,
         actions: [
           IconButton(icon: Icon(Icons.settings), onPressed: () {})
         ],
-        title: Text('Saifu Wallet'),
+        title: Text(
+          'saifu signer',
+          style: TextStyle(fontWeight: FontWeight.normal),
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -47,7 +51,7 @@ class MainInterface extends StatelessWidget {
                             child: SizedBox(
                               child: Text(
                                 'Amanuel Yosief Mussie',
-                                textAlign: TextAlign.left,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),
@@ -55,7 +59,7 @@ class MainInterface extends StatelessWidget {
                         Padding(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: IconButton(
-                              icon: Icon(Icons.qr_code_rounded),
+                              icon: Icon(Icons.add_circle),
                               onPressed: () {
                                 Navigator.of(context).push(CupertinoPageRoute(
                                   builder: (context) => QrCodeScanner(),
@@ -68,7 +72,17 @@ class MainInterface extends StatelessWidget {
                 ),
                 Card(
                     child: ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    //Navigator.of(context).push(MaterialPageRoute(builder: (context) => NetworkAccount()));
+                    showModalBottomSheet(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+                        ),
+                        isScrollControlled: true,
+                        isDismissible: true,
+                        context: context,
+                        builder: (context) => NetworkAccount());
+                  },
                   title: Text('wallet name'),
                   leading: Padding(
                     padding: const EdgeInsets.all(8.0),
