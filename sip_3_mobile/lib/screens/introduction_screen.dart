@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:encryptions/encryptions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
@@ -9,6 +10,7 @@ import 'package:openpgp/key_options.dart';
 import 'package:openpgp/openpgp.dart';
 import 'package:openpgp/options.dart';
 import 'package:password_hash/salt.dart';
+import 'package:sip_3_mobile/screens/main_interface_screen.dart';
 
 import '../constants.dart';
 
@@ -26,13 +28,13 @@ class _IntroductionState extends State<Introduction> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: Colors.grey[10],
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
                   height: 50,
@@ -105,9 +107,10 @@ class SupportedTokenButton extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: RaisedButton(
-            color: Colors.white,
+            color: greys,
             onPressed: () {
               showModalBottomSheet(
+                backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
                 ),
@@ -190,8 +193,10 @@ class _CreatePGPAccountFormState extends State<CreatePGPAccountForm> {
         children: <Widget>[
           Text(
             'Create a PGP Account',
+            style: TextStyle(fontSize: 17),
             textAlign: TextAlign.center,
           ),
+          Divider(),
           Form(
             key: _formKeys[0],
             autovalidate: false,
@@ -205,7 +210,7 @@ class _CreatePGPAccountFormState extends State<CreatePGPAccountForm> {
                     if (value.isEmpty) return "You can't have an empty name";
                     if (value.length < 2) return "Name must have more than one character";
                   },
-                  decoration: InputDecoration(labelText: 'Name', helperText: 'This has to be at least two characters in length.'),
+                  decoration: InputDecoration(labelText: 'Name', labelStyle: TextStyle(color: Colors.black), helperText: 'This has to be at least two characters in length.'),
                 ),
               ],
             ),
@@ -226,7 +231,7 @@ class _CreatePGPAccountFormState extends State<CreatePGPAccountForm> {
                     if (value.isEmpty) return "You can't have an empty email";
                     if (value.length < 2) return "Email must have more than one character";
                   },
-                  decoration: InputDecoration(labelText: 'Email', helperText: 'Provide a valid email address'),
+                  decoration: InputDecoration(labelText: 'Email', labelStyle: TextStyle(color: Colors.black), helperText: 'Provide a valid email address'),
                 ),
               ],
             ),
@@ -247,6 +252,7 @@ class _CreatePGPAccountFormState extends State<CreatePGPAccountForm> {
                     },
                     decoration: InputDecoration(
                       labelText: 'Password',
+                      labelStyle: TextStyle(color: Colors.black),
                     )),
               ],
             ),
@@ -266,37 +272,53 @@ class _CreatePGPAccountFormState extends State<CreatePGPAccountForm> {
                     if (value.length < 2) return "Password must have more than one character";
                     if (_passPhrase != _confirmPassPhrase) return "Passwords don't match";
                   },
-                  decoration: InputDecoration(labelText: 'Confirm password', helperText: 'Repeat the same password again'),
+                  decoration: InputDecoration(labelText: 'Confirm password', labelStyle: TextStyle(color: Colors.black), helperText: 'Repeat the same password again'),
                 ),
               ],
             ),
           ),
-          RaisedButton(
-            color: Colors.white,
-            child: Text('Create account'),
-            onPressed: () async {
-              _formKeys[0].currentState.save();
-              _formKeys[1].currentState.save();
-              _formKeys[2].currentState.save();
-              _formKeys[3].currentState.save();
-              Argon2 argon2 = Argon2(iterations: 16, hashLength: 64, memory: 256, parallelism: 2);
-              if (_formKeys[0].currentState.validate() && _formKeys[1].currentState.validate() && _formKeys[2].currentState.validate() && _formKeys[3].currentState.validate()) {
-                var keyOptions = KeyOptions(rsaBits: 1024);
-                var keyPair = await OpenPGP.generate(options: Options(name: _name, email: _email, passphrase: _passPhrase.toString(), keyOptions: keyOptions));
-                Uint8List salt = utf8.encode(Salt.generateAsBase64String(4));
-                Uint8List privateKey = utf8.encode(keyPair.privateKey);
-                Uint8List encryptedKey = await argon2.argon2id(privateKey, salt);
-                try {
-                  await storage.write(key: "pubkey", value: keyPair.publicKey);
-                  await storage.write(key: "prvkey", value: encryptedKey.toString());
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => null));
-                } catch (e) {
-                  print('Failed with error code: ${e.code}');
-                  print(e.message);
-                }
-              }
-            },
-          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RaisedButton(
+                  onPressed: () => Navigator.pop(context),
+                  padding: EdgeInsets.all(15),
+                  color: Colors.black,
+                  textColor: Colors.white,
+                  child: Text('Cancel'),
+                ),
+                RaisedButton(
+                  padding: EdgeInsets.all(15),
+                  color: Colors.white,
+                  child: Text('Create account'),
+                  onPressed: () async {
+                    _formKeys[0].currentState.save();
+                    _formKeys[1].currentState.save();
+                    _formKeys[2].currentState.save();
+                    _formKeys[3].currentState.save();
+                    Argon2 argon2 = Argon2(iterations: 16, hashLength: 64, memory: 256, parallelism: 2);
+                    if (_formKeys[0].currentState.validate() && _formKeys[1].currentState.validate() && _formKeys[2].currentState.validate() && _formKeys[3].currentState.validate()) {
+                      var keyOptions = KeyOptions(rsaBits: 1024);
+                      var keyPair = await OpenPGP.generate(options: Options(name: _name, email: _email, passphrase: _passPhrase.toString(), keyOptions: keyOptions));
+                      Uint8List salt = utf8.encode(Salt.generateAsBase64String(4));
+                      Uint8List privateKey = utf8.encode(keyPair.privateKey);
+                      Uint8List encryptedKey = await argon2.argon2id(privateKey, salt);
+                      try {
+                        await storage.write(key: "pubkey", value: keyPair.publicKey);
+                        await storage.write(key: "prvkey", value: encryptedKey.toString());
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MainInterface()));
+                      } catch (e) {
+                        print('Failed with error code: ${e.code}');
+                        print(e.message);
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );

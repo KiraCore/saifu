@@ -100,8 +100,8 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
           SvgPicture.string(
             ethvatar,
             fit: BoxFit.contain,
-            height: 200,
-            width: 200,
+            height: 150,
+            width: 150,
           ),
           Form(
             key: _formKeys[0],
@@ -109,6 +109,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             child: Column(
               children: <Widget>[
                 TextFormField(
+                  style: TextStyle(color: Colors.black),
                   autofocus: false,
                   enableInteractiveSelection: false,
                   onSaved: (String val) => setState(() => _name = val),
@@ -117,7 +118,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                     if (value.isEmpty) return "You can't have an empty name";
                     if (value.length < 2) return "Name must have more than one character";
                   },
-                  decoration: InputDecoration(labelText: 'Account Name', helperText: 'This has to be two characters in length.'),
+                  decoration: InputDecoration(labelText: 'Account Name', labelStyle: TextStyle(color: Colors.black), helperText: 'This has to be two characters in length.'),
                 ),
               ],
             ),
@@ -139,7 +140,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                 if (value.length < 4) return "Pin must be more than 3 digits";
                 if (value.length > 10) return "Pin must have a max of 10 digits";
               },
-              decoration: InputDecoration(labelText: 'Pin Number', helperText: 'This has to be at least 4 digits in length'),
+              decoration: InputDecoration(labelText: 'Pin Number', labelStyle: TextStyle(color: Colors.black), helperText: 'This has to be at least 4 digits in length'),
             ),
           ),
           Form(
@@ -160,7 +161,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                   if (_pin != _confirmPin) return "Pin number doesn't match";
                   if (value.length > 12) return "Pin must have a max of 12 digits";
                 },
-                decoration: InputDecoration(labelText: 'Confirm Pin Number', helperText: 'Re-enter the same pin. Pin numbers must match'),
+                decoration: InputDecoration(labelText: 'Confirm Pin Number', labelStyle: TextStyle(color: Colors.black), helperText: 'Re-enter the same pin. Pin numbers must match'),
               )),
           Padding(
             padding: const EdgeInsets.only(top: 20),
@@ -183,6 +184,8 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                 activeColor: Colors.purple),
           ),
           RaisedButton(
+            textColor: Colors.black,
+            padding: EdgeInsets.all(15),
             color: Colors.white,
             child: Text('Create account'),
             onPressed: () async {
