@@ -117,6 +117,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                   validator: (value) {
                     if (value.isEmpty) return "You can't have an empty name";
                     if (value.length < 2) return "Name must have more than one character";
+                    return null;
                   },
                   decoration: InputDecoration(labelText: 'Account Name', labelStyle: TextStyle(color: Colors.black), helperText: 'This has to be two characters in length.'),
                 ),
@@ -139,6 +140,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                 if (value.isEmpty) return "You can't have an empty Pin";
                 if (value.length < 4) return "Pin must be more than 3 digits";
                 if (value.length > 10) return "Pin must have a max of 10 digits";
+                return null;
               },
               decoration: InputDecoration(labelText: 'Pin Number', labelStyle: TextStyle(color: Colors.black), helperText: 'This has to be at least 4 digits in length'),
             ),
@@ -160,6 +162,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                   if (value.length < 4) return "Pin must be more than 3 digits";
                   if (_pin != _confirmPin) return "Pin number doesn't match";
                   if (value.length > 12) return "Pin must have a max of 12 digits";
+                  return null;
                 },
                 decoration: InputDecoration(labelText: 'Confirm Pin Number', labelStyle: TextStyle(color: Colors.black), helperText: 'Re-enter the same pin. Pin numbers must match'),
               )),
