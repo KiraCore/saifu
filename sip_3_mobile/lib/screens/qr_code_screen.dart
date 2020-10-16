@@ -36,8 +36,8 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
             Expanded(
                 flex: 5,
                 child: SizedBox(
-                  child: Container(color: greys
-                      /*
+                  child: Container(
+                    color: greys,
                     child: QRView(
                       key: qrKey,
                       onQRViewCreated: _onQRViewCreated,
@@ -45,8 +45,7 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
                         borderColor: Colors.red,
                       ),
                     ),
-                    */
-                      ),
+                  ),
                 )),
             Expanded(
               flex: 3,

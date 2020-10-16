@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sip_3_mobile/models/signature_model.dart';
 import 'package:sip_3_mobile/screens/create_signature_account.dart';
 
@@ -12,6 +13,17 @@ class Introduction extends StatefulWidget {
 }
 
 class _IntroductionState extends State<Introduction> {
+  @override
+  void initState() {
+    super.initState();
+    updateStage();
+  }
+
+  Future updateStage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('stage', 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

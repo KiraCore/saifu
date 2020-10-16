@@ -9,12 +9,16 @@ import 'package:openpgp/key_options.dart';
 import 'package:openpgp/openpgp.dart';
 import 'package:openpgp/options.dart';
 import 'package:password_hash/salt.dart';
-import 'package:riverpod/all.dart';
 import 'package:sip_3_mobile/models/signature_model.dart';
 
 import 'package:sip_3_mobile/screens/main_interface_screen.dart';
 
 import '../constants.dart';
+
+class CreatePGPAccountForm extends StatefulWidget {
+  @override
+  _CreatePGPAccountFormState createState() => _CreatePGPAccountFormState();
+}
 
 List<GlobalKey<FormState>> _formKeys = [
   GlobalKey<FormState>(),
@@ -23,8 +27,7 @@ List<GlobalKey<FormState>> _formKeys = [
   GlobalKey<FormState>()
 ];
 
-// ignore: must_be_immutable
-class CreatePGPAccountForm extends ConsumerWidget {
+class _CreatePGPAccountFormState extends State<CreatePGPAccountForm> {
   String ethvatar = Jdenticon.toSvg('');
   String _name;
   String _email;
@@ -32,13 +35,10 @@ class CreatePGPAccountForm extends ConsumerWidget {
   String _confirmPassPhrase;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final signaturestate = watch(signatureListProvider.state);
+  Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+        padding: const EdgeInsets.all(20.0),
+        child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -134,10 +134,8 @@ class CreatePGPAccountForm extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Expanded(
                   child: RaisedButton(
                     onPressed: () => Navigator.pop(context),
@@ -147,8 +145,9 @@ class CreatePGPAccountForm extends ConsumerWidget {
                     child: Text('Cancel'),
                   ),
                 ),
-                Expanded(
-                  child: RaisedButton(
+                Expanded(child: Consumer(builder: (context, watch, _) {
+                  final signaturestate = watch(signatureListProvider).state;
+                  return RaisedButton(
                     padding: EdgeInsets.all(15),
                     color: Colors.white,
                     child: Text('Create account'),
@@ -163,9 +162,7 @@ class CreatePGPAccountForm extends ConsumerWidget {
                         var keyPair = await OpenPGP.generate(options: Options(name: _name, email: _email, passphrase: _passPhrase.toString(), keyOptions: keyOptions));
                         Uint8List salt = utf8.encode(Salt.generateAsBase64String(4));
                         Uint8List privateKey = utf8.encode(keyPair.privateKey);
-
                         Uint8List encryptedKey = await argon2.argon2id(privateKey, salt);
-
                         try {
                           await storage.write(key: "pubkey", value: keyPair.publicKey);
                           await storage.write(key: "prvkey", value: encryptedKey.toString());
@@ -177,13 +174,9 @@ class CreatePGPAccountForm extends ConsumerWidget {
                         }
                       }
                     },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+                  );
+                })),
+              ]))
+        ]));
   }
 }

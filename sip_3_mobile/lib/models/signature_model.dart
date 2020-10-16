@@ -6,6 +6,14 @@ class Signature {
   final String type;
   final String ethvatar;
   final String pubkey;
+
+  factory Signature.fromJson(Map<String, dynamic> json) => Signature(type: json["type"], ethvatar: json["ethvatar"], pubkey: json["pubkey"]);
+
+  Map<String, dynamic> toJson() => {
+        "type": type,
+        "ethvatar": ethvatar,
+        "pubkey": pubkey
+      };
 }
 
 class SupportedTypes {
@@ -39,5 +47,5 @@ class SignatureList extends StateNotifier<List<Signature>> {
 }
 
 final signatureListProvider = StateNotifierProvider<SignatureList>((ref) => SignatureList([
-      Signature(type: 'testType', ethvatar: 'testEthVatar', pubkey: 'ethPubKey')
+      Signature(type: 'testType', ethvatar: 'testEthVatar', pubkey: 'cosmos1nynns8ex9fq6sjjfj8k79ymkdz4sqth06xexae')
     ]));

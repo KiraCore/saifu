@@ -9,8 +9,8 @@ import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:password_hash/salt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sip_3_mobile/screens/introduction_screen.dart';
 import '../constants.dart';
-import 'introduction_screen.dart';
 
 class CreateAccount extends StatefulWidget {
   @override

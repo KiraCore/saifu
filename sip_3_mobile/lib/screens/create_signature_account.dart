@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sip_3_mobile/widgets/create_pgp_account.dart';
+import 'package:sip_3_mobile/widgets/create_pgp_widget.dart';
 
 class SignatureAccount extends StatelessWidget {
   final String type;

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sip_3_mobile/screens/introduction_screen.dart';
+import 'package:sip_3_mobile/screens/login_interface.dart';
 import 'screens/onboarding_screen.dart';
 
 void main() {
@@ -31,19 +33,20 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> with AfterLayoutMixin<SplashScreen> {
-  Future firstTime() async {
+  Future getStage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool _first = (prefs.getBool('first') ?? false);
-    if (_first) {
-      //Navigator.of(context).push(new MaterialPageRoute(builder: (context) => OnBoarding()));
-    } else {
-      await prefs.setBool('seen', true);
-      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => OnBoarding()));
+    int stage = (prefs.getInt('stage') ?? 0);
+    if (stage == 0) {
+      Navigator.of(context).push(new MaterialPageRoute(builder: (context) => OnBoarding()));
+    } else if (stage == 1) {
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => Introduction()));
+    } else if (stage == 2) {
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => Login()));
     }
   }
 
   @override
-  void afterFirstLayout(BuildContext context) => firstTime();
+  void afterFirstLayout(BuildContext context) => getStage();
 
   @override
   Widget build(BuildContext context) {
