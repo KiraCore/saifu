@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sip_3_mobile/models/signature_model.dart';
 import 'package:sip_3_mobile/screens/create_signature_account.dart';
 
 // ignore: must_be_immutable
 class Introduction extends StatefulWidget {
-  String ethvatar = Jdenticon.toSvg('');
-  Introduction({this.ethvatar});
+  Introduction();
   @override
   _IntroductionState createState() => _IntroductionState();
 }
@@ -19,7 +17,7 @@ class _IntroductionState extends State<Introduction> {
     updateStage();
   }
 
-  Future updateStage() async {
+  void updateStage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('stage', 1);
   }
@@ -40,16 +38,6 @@ class _IntroductionState extends State<Introduction> {
                 SizedBox(
                   height: 50,
                 ),
-                /*
-                SvgPicture.string(
-                  'widget.ethvatar',
-                  fit: BoxFit.contain,
-                  height: 75,
-                  width: 75,
-                  alignment: Alignment.centerLeft,
-                ),
-                */
-
                 Text(
                   "Saifu",
                   style: TextStyle(fontSize: 40, color: Colors.black),
@@ -82,7 +70,6 @@ class _IntroductionState extends State<Introduction> {
                         return Card(
                           child: ListTile(
                             onTap: () {
-                              print(SupportedTypes.signatureTypesSupported[index].type.toString());
                               switch (SupportedTypes.signatureTypesSupported[index].type.toString()) {
                                 case 'PGP':
                                   {

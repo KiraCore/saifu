@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:after_layout/after_layout.dart';
+import 'package:encryptions/encryptions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
@@ -18,6 +22,7 @@ class _LoginState extends State<Login> with AfterLayoutMixin<Login> {
   @override
   void afterFirstLayout(BuildContext context) => _authenticate();
   String _pincode;
+  String _salt;
   LocalAuthentication auth = LocalAuthentication();
 
   Future<void> _authenticate() async {
@@ -41,11 +46,11 @@ class _LoginState extends State<Login> with AfterLayoutMixin<Login> {
   }
 
   Future<void> getPassword() async {
-    String password;
-    await storage.write(key: "passwordhash", value: '1234');
-    password = await storage.read(key: "passwordhash");
+    String password = await storage.read(key: "EncryptedPassword");
+    String salt = await storage.read(key: 'salt');
     setState(() {
-      _pincode = password.toString();
+      _pincode = password;
+      _salt = salt;
     });
   }
 
@@ -53,8 +58,12 @@ class _LoginState extends State<Login> with AfterLayoutMixin<Login> {
   void initState() {
     super.initState();
     getPassword();
-    _controller.addListener(() {
-      if (_controller.text == _pincode) {
+    _controller.addListener(() async {
+      Uint8List password = utf8.encode(_controller.text);
+      Uint8List salt = utf8.encode(_salt);
+      Argon2 argon2 = Argon2(iterations: 16, hashLength: 64, memory: 256, parallelism: 2);
+      Uint8List hash = await argon2.argon2id(password, salt);
+      if (hash.toString() == _pincode.toString()) {
         Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (context) => MainInterface()));
       }
     });

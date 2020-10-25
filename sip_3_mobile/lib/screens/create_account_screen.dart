@@ -8,7 +8,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:password_hash/salt.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sip_3_mobile/screens/introduction_screen.dart';
 import '../constants.dart';
 
@@ -23,7 +22,7 @@ class _CreateAccountState extends State<CreateAccount> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Create your account'),
+        title: Text('Create an account'),
         automaticallyImplyLeading: false,
         elevation: 0.0,
         centerTitle: true,
@@ -105,7 +104,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
           ),
           Form(
             key: _formKeys[0],
-            autovalidate: true,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               children: <Widget>[
                 TextFormField(
@@ -126,7 +125,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
           ),
           Form(
             key: _formKeys[1],
-            autovalidate: true,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: TextFormField(
               autofocus: false,
               enableInteractiveSelection: false,
@@ -147,7 +146,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
           ),
           Form(
               key: _formKeys[2],
-              autovalidate: true,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: TextFormField(
                 autofocus: false,
                 enableInteractiveSelection: false,
@@ -184,7 +183,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                     }
                   });
                 },
-                activeColor: Colors.purple),
+                activeColor: Colors.grey),
           ),
           RaisedButton(
             textColor: Colors.black,
@@ -198,17 +197,16 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
 
               if (_formKeys[0].currentState.validate() && _formKeys[1].currentState.validate() && _formKeys[2].currentState.validate()) {
                 Uint8List password = utf8.encode(_pin.toString());
-                Uint8List salt = utf8.encode(Salt.generateAsBase64String(4));
+                String generatedSalt = Salt.generateAsBase64String(4);
+                Uint8List salt = utf8.encode(generatedSalt);
                 Argon2 argon2 = Argon2(iterations: 16, hashLength: 64, memory: 256, parallelism: 2);
                 Uint8List hash = await argon2.argon2id(password, salt);
+
                 try {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  await prefs.setString('name', _name);
-                  await storage.write(key: "passwordhash", value: hash.toString());
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => Introduction(
-                            ethvatar: ethvatar,
-                          )));
+                  await storage.write(key: "AccountName", value: _name);
+                  await storage.write(key: "EncryptedPassword", value: hash.toString());
+                  await storage.write(key: 'salt', value: generatedSalt);
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Introduction()));
                 } catch (e) {
                   print('Failed with error code: ${e.code}');
                   print(e.message);

@@ -47,7 +47,7 @@ class _CreatePGPAccountFormState extends State<CreatePGPAccountForm> {
                 children: <Widget>[
                   Form(
                     key: _formKeys[0],
-                    autovalidate: false,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       children: <Widget>[
                         TextFormField(
@@ -66,7 +66,7 @@ class _CreatePGPAccountFormState extends State<CreatePGPAccountForm> {
                   ),
                   Form(
                     key: _formKeys[1],
-                    autovalidate: false,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       children: <Widget>[
                         TextFormField(
@@ -88,7 +88,7 @@ class _CreatePGPAccountFormState extends State<CreatePGPAccountForm> {
                   ),
                   Form(
                     key: _formKeys[2],
-                    autovalidate: false,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       children: <Widget>[
                         TextFormField(
@@ -110,7 +110,7 @@ class _CreatePGPAccountFormState extends State<CreatePGPAccountForm> {
                   ),
                   Form(
                     key: _formKeys[3],
-                    autovalidate: false,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       children: <Widget>[
                         TextFormField(
@@ -156,17 +156,20 @@ class _CreatePGPAccountFormState extends State<CreatePGPAccountForm> {
                       _formKeys[1].currentState.save();
                       _formKeys[2].currentState.save();
                       _formKeys[3].currentState.save();
+
                       Argon2 argon2 = Argon2(iterations: 16, hashLength: 64, memory: 256, parallelism: 2);
+
                       if (_formKeys[0].currentState.validate() && _formKeys[1].currentState.validate() && _formKeys[2].currentState.validate() && _formKeys[3].currentState.validate()) {
                         var keyOptions = KeyOptions(rsaBits: 1024);
                         var keyPair = await OpenPGP.generate(options: Options(name: _name, email: _email, passphrase: _passPhrase.toString(), keyOptions: keyOptions));
+
                         Uint8List salt = utf8.encode(Salt.generateAsBase64String(4));
                         Uint8List privateKey = utf8.encode(keyPair.privateKey);
                         Uint8List encryptedKey = await argon2.argon2id(privateKey, salt);
                         try {
-                          await storage.write(key: "pubkey", value: keyPair.publicKey);
-                          await storage.write(key: "prvkey", value: encryptedKey.toString());
-                          signaturestate.add(Signature(ethvatar: _name, pubkey: keyPair.publicKey, type: _name));
+                          signaturestate.add(Signature(ethvatar: _name, pubkey: keyPair.publicKey, type: _name, privkey: encryptedKey.toString()));
+                          final String encodeData = Signature.encodeSignatures(signaturestate);
+                          await storage.write(key: 'database', value: encodeData);
                           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MainInterface()));
                         } catch (e) {
                           print('Failed with error code: ${e.code}');

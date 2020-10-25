@@ -34,8 +34,8 @@ dependencies:
   local_auth: ^0.6.3+2
   openpgp: ^0.9.9
   password_hash: ^2.0.0
-  pretty_qr_code: ^1.0.1
   qr_code_scanner: ^0.0.13
+  qr_flutter: ^3.2.0
   shared_preferences: ^0.5.12
 
 dev_dependencies:
@@ -55,6 +55,8 @@ flutter:
     - images/onboardingImg1.png
     - images/onboardingImg2.png
     - images/onboardingImg3.png
+    - assets/privatekey.txt
+    - assets/pubkey.txt
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

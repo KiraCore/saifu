@@ -1,0 +1,5 @@
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: Keybase Go 5.5.0 (windows)
+
+
+-----END PGP PUBLIC KEY BLOCK-----
