@@ -53,9 +53,7 @@ class _SignatureAccountState extends State<SignatureAccount> {
                         ),
                       )),
                   ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(50),
-                        topRight: Radius.circular(50)),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50)),
                     child: Container(
                       color: Colors.white,
                       child: Column(
@@ -66,8 +64,7 @@ class _SignatureAccountState extends State<SignatureAccount> {
                             children: [
                               CircleAvatar(
                                 radius: 40,
-                                child: Image.network(
-                                    'https://res-3.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_256,w_256,f_auto,q_auto:eco/v1505765479/zghucdtjjevivjihplty.png'),
+                                child: Image.network('https://res-3.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_256,w_256,f_auto,q_auto:eco/v1505765479/zghucdtjjevivjihplty.png'),
                               ),
                               Text(
                                 'Public Address: ',
@@ -81,8 +78,7 @@ class _SignatureAccountState extends State<SignatureAccount> {
                                     child: SingleChildScrollView(
                                       scrollDirection: Axis.vertical,
                                       child: ConstrainedBox(
-                                        constraints:
-                                            new BoxConstraints(maxHeight: 60),
+                                        constraints: BoxConstraints(maxHeight: 60),
                                         child: TextField(
                                           showCursor: false,
                                           enabled: true,
@@ -119,8 +115,7 @@ class _SignatureAccountState extends State<SignatureAccount> {
                                     child: SingleChildScrollView(
                                       scrollDirection: Axis.vertical,
                                       child: ConstrainedBox(
-                                        constraints:
-                                            new BoxConstraints(maxHeight: 60),
+                                        constraints: BoxConstraints(maxHeight: 60),
                                         child: TextField(
                                           showCursor: false,
                                           enabled: true,
@@ -168,22 +163,8 @@ class _SignatureAccountState extends State<SignatureAccount> {
                             onPressed: () async {
                               print(txtPrivController.text);
                               print(txtPubController.text);
-                              await storage.write(
-                                  key: "keybasePub",
-                                  value: txtPubController.text);
-                              await storage.write(
-                                  key: "keybasePriv",
-                                  value: txtPrivController.text);
-                              /*
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProcessData(
-                                      privkey: txtPrivController.text,
-                                      
-                                    ),
-                                  ));
-                                  */
+                              await storage.write(key: "keybasePub", value: txtPubController.text);
+                              await storage.write(key: "keybasePriv", value: txtPrivController.text);
                             },
                             padding: EdgeInsets.all(15),
                             color: Colors.deepPurple,

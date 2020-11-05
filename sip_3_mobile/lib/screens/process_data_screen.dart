@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sip_3_mobile/constants.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:qr_flutter/qr_flutter.dart';
+
+import 'package:openpgp/openpgp.dart';
 
 // ignore: must_be_immutable
 class ProcessData extends StatelessWidget {
@@ -22,6 +25,8 @@ class ProcessData extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController txtController = new TextEditingController();
     txtController.text = qrData.toString();
+    TextEditingController passwordController = new TextEditingController();
+    passwordController.text = '';
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -62,50 +67,130 @@ class ProcessData extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: RaisedButton.icon(
-                      icon: Icon(Icons.arrow_back_ios),
-                      label: Text('PrivateKey'),
-                      onPressed: () {
-                        Clipboard.setData(ClipboardData(text: privkey));
-                      },
+                    child: RaisedButton(
+                      onPressed: () => Navigator.pop(context),
+                      padding: EdgeInsets.all(15),
+                      color: Colors.white,
+                      child: Text('Cancel'),
                     ),
                   ),
-                  SizedBox(width: 5),
+                  SizedBox(width: 10),
                   Expanded(
-                    child: RaisedButton.icon(
-                      icon: Icon(Icons.arrow_back_ios),
-                      label: Text('publicKey'),
-                      onPressed: () {
-                        Clipboard.setData(ClipboardData(text: pubkey));
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: RaisedButton.icon(
-                      icon: Icon(Icons.arrow_forward_ios),
-                      label: Text('Sign'),
+                    child: RaisedButton(
                       onPressed: () async {
-/*  
-                        var newPubKey = await loadPub();
-                        var newPrivKey = await loadPriv();
-
-                        var result = await OpenPGP.sign("text", newPubKey, newPrivKey, 'Amenuel123');
-                        print(result);
-  
                         showModalBottomSheet(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-                            ),
-                            isScrollControlled: true,
-                            isDismissible: true,
-                            context: context,
-                            builder: (context) => SignedQRWidget(
-                                  result: result,
-                                ));
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                left: 20,
+                                right: 20,
+                                top: 20,
+                                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+                              ),
+                              child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      flex: 10,
+                                      child: TextField(
+                                        autofocus: true,
+                                        decoration: InputDecoration(labelText: 'Enter your passphrase', labelStyle: TextStyle(color: Colors.black), helperText: 'This has to this selected account passphrase.'),
+                                        obscureText: true,
+                                        controller: passwordController,
+                                      ),
+                                    ),
+                                    RaisedButton(
+                                      color: Colors.white,
+                                      onPressed: () async {
+                                        try {
+                                          var result = await OpenPGP.sign("text", pubkey, privkey, "123");
+                                          print(result);
+                                          Navigator.pop(context);
 
-                                */
+                                          showModalBottomSheet(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+                                              ),
+                                              isScrollControlled: true,
+                                              isDismissible: true,
+                                              context: context,
+                                              builder: (context) => Padding(
+                                                    padding: const EdgeInsets.all(20.0),
+                                                    child: Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        ConstrainedBox(
+                                                          constraints: new BoxConstraints(maxHeight: 300),
+                                                          child: QrImage(
+                                                              data: result,
+                                                              version: QrVersions.auto,
+                                                              size: 200,
+                                                              errorCorrectionLevel: QrErrorCorrectLevel.L,
+                                                              errorStateBuilder: (cxt, err) {
+                                                                return Container(
+                                                                  child: Center(
+                                                                    child: Text(
+                                                                      "QR code could not be generated",
+                                                                      textAlign: TextAlign.center,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              }),
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(8.0),
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                              children: [
+                                                                Expanded(
+                                                                  flex: 10,
+                                                                  child: Card(
+                                                                    color: greys,
+                                                                    child: Container(child: ConstrainedBox(constraints: new BoxConstraints(maxHeight: 100), child: SingleChildScrollView(child: Text("$result + $result")))),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child: IconButton(
+                                                                      icon: Icon(Icons.content_copy),
+                                                                      onPressed: () {
+                                                                        Clipboard.setData(ClipboardData(
+                                                                          text: result,
+                                                                        ));
+                                                                      }),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ));
+                                        } on PlatformException catch (err) {
+                                          print(err);
+                                          //TODO Handle err
+                                        } catch (err) {
+                                          //TODO other types of Exceptions
+                                        }
+                                      },
+                                      child: Text('Submit'),
+                                    ),
+                                  ],
+                                ),
+                              ]),
+                            );
+                          },
+                        );
                       },
+                      padding: EdgeInsets.all(15),
+                      color: Colors.white,
+                      textColor: Colors.black,
+                      child: Text('Sign'),
                     ),
                   ),
                 ],

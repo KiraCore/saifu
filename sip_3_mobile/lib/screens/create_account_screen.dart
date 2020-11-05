@@ -4,19 +4,12 @@ import 'dart:typed_data';
 import 'package:encryptions/encryptions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:password_hash/salt.dart';
 import 'package:sip_3_mobile/screens/introduction_screen.dart';
 import '../constants.dart';
 
-class CreateAccount extends StatefulWidget {
-  @override
-  _CreateAccountState createState() => _CreateAccountState();
-}
-
-class _CreateAccountState extends State<CreateAccount> {
+class CreateAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,14 +44,33 @@ List<GlobalKey<FormState>> _formKeys = [
 ];
 
 class _CreateAccountFormState extends State<CreateAccountForm> {
-  String ethvatar = Jdenticon.toSvg('');
+  FocusNode fname;
+  FocusNode fpin;
+  FocusNode fconfirmPin;
+
   String _name;
   String _pin;
   String _confirmPin;
 
   LocalAuthentication auth = LocalAuthentication();
-  bool enableBiometric = false;
+  bool enabledBiometric = false;
   bool isSwitched = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fname = FocusNode();
+    fpin = FocusNode();
+    fconfirmPin = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    fname.dispose();
+    fpin.dispose();
+    fconfirmPin.dispose();
+    super.dispose();
+  }
 
   Future<void> _authenticate() async {
     bool authenticated = false;
@@ -71,6 +83,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     if (!mounted) return;
     setState(() {
       authenticated ? isSwitched = true : isSwitched = false;
+      enabledBiometric = true;
     });
   }
 
@@ -86,6 +99,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     setState(() {
       stopAuthentication ? isSwitched = false : isSwitched = true;
       isSwitched = false;
+      enabledBiometric = false;
     });
   }
 
@@ -96,28 +110,29 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          SvgPicture.string(
-            ethvatar,
-            fit: BoxFit.contain,
-            height: 150,
-            width: 150,
-          ),
           Form(
             key: _formKeys[0],
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               children: <Widget>[
                 TextFormField(
+                  autofocus: true,
+                  focusNode: fname,
+                  textInputAction: TextInputAction.next,
+                  onFieldSubmitted: (_) {
+                    fname.unfocus();
+                    FocusScope.of(context).requestFocus(fpin);
+                  },
                   style: TextStyle(color: Colors.black),
-                  autofocus: false,
-                  enableInteractiveSelection: false,
                   onSaved: (String val) => setState(() => _name = val),
-                  onChanged: (String name) => setState(() => ethvatar = Jdenticon.toSvg(name)),
                   validator: (value) {
                     if (value.isEmpty) return "You can't have an empty name";
                     if (value.length < 2) return "Name must have more than one character";
                     return null;
                   },
+                  inputFormatters: [
+                    //FilteringTextInputFormatter.deny(RegExp("[ ]"))
+                  ],
                   decoration: InputDecoration(labelText: 'Account Name', labelStyle: TextStyle(color: Colors.black), helperText: 'This has to be two characters in length.'),
                 ),
               ],
@@ -128,7 +143,12 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: TextFormField(
               autofocus: false,
-              enableInteractiveSelection: false,
+              focusNode: fpin,
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (_) {
+                fpin.unfocus();
+                FocusScope.of(context).requestFocus(fconfirmPin);
+              },
               obscureText: true,
               onSaved: (String val) => setState(() => _pin = val),
               keyboardType: TextInputType.number,
@@ -149,7 +169,11 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: TextFormField(
                 autofocus: false,
-                enableInteractiveSelection: false,
+                focusNode: fconfirmPin,
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: (_) {
+                  fconfirmPin.unfocus();
+                },
                 obscureText: true,
                 onSaved: (String val) => setState(() => _confirmPin = val),
                 keyboardType: TextInputType.number,
@@ -201,11 +225,11 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                 Uint8List salt = utf8.encode(generatedSalt);
                 Argon2 argon2 = Argon2(iterations: 16, hashLength: 64, memory: 256, parallelism: 2);
                 Uint8List hash = await argon2.argon2id(password, salt);
-
                 try {
-                  await storage.write(key: "AccountName", value: _name);
+                  await storage.write(key: "AccountName", value: _name.trim());
                   await storage.write(key: "EncryptedPassword", value: hash.toString());
                   await storage.write(key: 'salt', value: generatedSalt);
+                  await storage.write(key: 'enabledBiometric', value: enabledBiometric.toString());
                   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Introduction()));
                 } catch (e) {
                   print('Failed with error code: ${e.code}');

@@ -1,4 +1,3 @@
-import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,7 +31,7 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with AfterLayoutMixin<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> {
   Future getStage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int stage = (prefs.getInt('stage') ?? 0);
@@ -46,7 +45,10 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayoutMixin<Splas
   }
 
   @override
-  void afterFirstLayout(BuildContext context) => getStage();
+  void initState() {
+    super.initState();
+    getStage();
+  }
 
   @override
   Widget build(BuildContext context) {

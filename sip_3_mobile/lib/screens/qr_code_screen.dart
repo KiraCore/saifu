@@ -23,7 +23,11 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController controller;
   //String qrText = '';
-  List<String> qrData = [];
+  List<String> qrData = [
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut id imperdiet purus.',
+    'Nunc vitae lobortis dolor, ac sagittis erat. ',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+  ];
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
@@ -146,46 +150,51 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
                       width: 100,
                       child: Container(
                           color: greys,
-                          child: ListView.builder(
-                            itemCount: qrData.length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
+                          child: Center(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: qrData.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 20.0, bottom: 20, left: 8),
                                   child: SizedBox(
-                                    height: 50,
                                     width: 40,
-                                    child: Container(
-                                      color: Colors.grey[300],
-                                      child: Center(child: Text((index + 1).toString())),
+                                    child: Center(
+                                      child: Container(
+                                        color: Colors.grey[300],
+                                        child: Center(child: Text((index + 1).toString())),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           )),
                     ),
                   ),
                 ],
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: RaisedButton(
-                    onPressed: () => Navigator.pop(context),
-                    padding: EdgeInsets.all(15),
-                    color: Colors.black,
-                    textColor: Colors.white,
-                    child: Text('Cancel'),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
                     child: RaisedButton(
-                      onPressed: () => Navigator.push(
+                      onPressed: () => Navigator.pop(context),
+                      padding: EdgeInsets.all(15),
+                      color: Colors.white,
+                      textColor: Colors.black,
+                      child: Text('Cancel'),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: RaisedButton(
+                      onPressed: () => Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProcessData(
@@ -200,8 +209,8 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
                       child: Text('Continue'),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

@@ -15,7 +15,6 @@ class _CreateSignatureState extends State<CreateSignature> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0.0,
@@ -34,10 +33,7 @@ class _CreateSignatureState extends State<CreateSignature> {
               ),
               Text(
                 "Wallet.",
-                style: TextStyle(
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: Colors.black),
                 textAlign: TextAlign.left,
               ),
               SizedBox(
@@ -62,12 +58,8 @@ class _CreateSignatureState extends State<CreateSignature> {
                       return Card(
                         child: ListTile(
                           onTap: () {
-                            print(SupportedTypes
-                                .signatureTypesSupported[index].type
-                                .toString());
-                            switch (SupportedTypes
-                                .signatureTypesSupported[index].type
-                                .toString()) {
+                            print(SupportedTypes.signatureTypesSupported[index].type.toString());
+                            switch (SupportedTypes.signatureTypesSupported[index].type.toString()) {
                               case 'PGP':
                                 {
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -80,15 +72,12 @@ class _CreateSignatureState extends State<CreateSignature> {
                                 {
                                   showModalBottomSheet(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(30),
-                                            topRight: Radius.circular(30)),
+                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
                                       ),
                                       isScrollControlled: true,
                                       isDismissible: true,
                                       context: context,
-                                      builder: (context) =>
-                                          SignatureAccount(type: 'KeyBase'));
+                                      builder: (context) => SignatureAccount(type: 'KeyBase'));
                                 }
                                 break;
                               default:
@@ -96,12 +85,10 @@ class _CreateSignatureState extends State<CreateSignature> {
                                 break;
                             }
                           },
-                          title: Text(SupportedTypes
-                              .signatureTypesSupported[index].type),
+                          title: Text(SupportedTypes.signatureTypesSupported[index].type),
                           trailing: Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: Image.network(SupportedTypes
-                                .signatureTypesSupported[index].image),
+                            child: Image.network(SupportedTypes.signatureTypesSupported[index].image),
                           ),
                         ),
                       );

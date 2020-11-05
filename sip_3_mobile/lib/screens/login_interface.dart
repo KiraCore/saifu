@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:after_layout/after_layout.dart';
+
 import 'package:encryptions/encryptions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,11 +18,10 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> with AfterLayoutMixin<Login> {
-  @override
-  void afterFirstLayout(BuildContext context) => _authenticate();
+class _LoginState extends State<Login> {
   String _pincode;
   String _salt;
+  bool _enabledBiometric = false;
   LocalAuthentication auth = LocalAuthentication();
 
   Future<void> _authenticate() async {
@@ -45,19 +44,22 @@ class _LoginState extends State<Login> with AfterLayoutMixin<Login> {
     }
   }
 
-  Future<void> getPassword() async {
+  Future<void> retrieveInformation() async {
+    String enabledBiometric = await storage.read(key: 'enabledBiometric');
     String password = await storage.read(key: "EncryptedPassword");
     String salt = await storage.read(key: 'salt');
     setState(() {
       _pincode = password;
       _salt = salt;
+      _enabledBiometric = enabledBiometric == 'true';
+      if (_enabledBiometric == true) _authenticate();
     });
   }
 
   @override
   void initState() {
     super.initState();
-    getPassword();
+    retrieveInformation();
     _controller.addListener(() async {
       Uint8List password = utf8.encode(_controller.text);
       Uint8List salt = utf8.encode(_salt);
@@ -131,6 +133,7 @@ class _LoginState extends State<Login> with AfterLayoutMixin<Login> {
                   child: Padding(
                 padding: const EdgeInsets.all(25.0),
                 child: Numpad(
+                  enabledBiometric: _enabledBiometric,
                   controller: _controller,
                   buttonTextSize: 30,
                   textColor: Colors.black,

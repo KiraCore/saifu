@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Numpad extends StatelessWidget {
   ///Space between buttons on the numpad grid.
+  final bool enabledBiometric;
   final double innerPadding;
 
   ///Size of the text on the buttons in the numpad grid.
@@ -13,7 +14,7 @@ class Numpad extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback authenticationSelected;
 
-  Numpad({Key key, @required this.controller, this.buttonColor, this.textColor, this.innerPadding = 4, this.buttonTextSize = 30, this.height = double.infinity, this.width = double.infinity, this.authenticationSelected}) : super(key: key);
+  Numpad({Key key, @required this.controller, this.buttonColor, this.textColor, this.innerPadding = 4, this.buttonTextSize = 30, this.height = double.infinity, this.width = double.infinity, this.authenticationSelected, this.enabledBiometric}) : super(key: key);
 
   EdgeInsetsGeometry _buttonPadding() {
     return EdgeInsets.all(innerPadding);
@@ -33,7 +34,8 @@ class Numpad extends StatelessWidget {
     return Expanded(
       child: Container(
         padding: _buttonPadding(),
-        child: RaisedButton(
+        child: FlatButton(
+            shape: CircleBorder(side: BorderSide.none),
             child: effectiveChild,
             color: buttonColor,
             onPressed: () => {
@@ -66,7 +68,9 @@ class Numpad extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Expanded(child: Container(padding: _buttonPadding(), child: RaisedButton(color: buttonColor, child: Icon(Icons.fingerprint), onPressed: () => authenticationSelected()))),
+            Expanded(
+              child: enabledBiometric ? Container(padding: _buttonPadding(), child: FlatButton(shape: CircleBorder(side: BorderSide.none), color: buttonColor, child: Icon(Icons.fingerprint), onPressed: () => authenticationSelected())) : Container(padding: _buttonPadding(), child: FlatButton(shape: CircleBorder(side: BorderSide.none), color: buttonColor, child: Container(), onPressed: () {})),
+            ),
             _buildNumButton(context: context, displayNum: 0),
             _buildNumButton(
                 context: context,

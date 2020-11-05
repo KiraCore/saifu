@@ -10,7 +10,7 @@ class Signature {
   final String privkey;
 
   factory Signature.fromJson(Map<String, dynamic> jsonData) {
-    return Signature(type: jsonData['type'], ethvatar: jsonData['ethvatar'], pubkey: jsonData['pubkey'], privkey: jsonData['privatekey']);
+    return Signature(type: jsonData['type'], ethvatar: jsonData['ethvatar'], pubkey: jsonData['pubkey'], privkey: jsonData['privkey']);
   }
 
   static Map<String, dynamic> toMap(Signature signature) => {

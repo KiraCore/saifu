@@ -67,7 +67,8 @@ class _OnBoardingState extends State<OnBoarding> {
       done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
-        color: Color(0xFFBDBDBD),
+        color: Colors.white,
+        //Color(0xFFBDBDBD)
         activeSize: Size(22.0, 10.0),
         activeShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25.0)),
