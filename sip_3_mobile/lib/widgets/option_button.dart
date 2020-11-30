@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:file_picker/file_picker.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
+import 'package:memoryfilepicker/memoryfilepicker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sip_3_mobile/models/signature_model.dart';
-import 'package:sip_3_mobile/screens/create_signature.dart';
+import 'package:sip_3_mobile/models/account_model.dart';
+import 'package:sip_3_mobile/widgets/create_account_modal.dart';
 
 import '../constants.dart';
 
@@ -24,9 +25,20 @@ class _OptionButtonState extends State<OptionButton> {
   var rootPath;
   var filePickerSelectMode;
   File file;
-  String filePath;
 
-  Future<void> _openFile(BuildContext context, List<Signature> signaturestate) async {
+  Future<void> _openFileContent(BuildContext context, List<Account> accountState) async {
+    final selectedFile = await MemoryFilePicker.getFile(type: FileType.custom, allowedExtensions: [
+      'txt'
+    ]);
+    file = File(selectedFile.path);
+    String contents = await file.readAsStringSync();
+    var fileContent = jsonDecode(contents);
+    accountState.add(Account(ethvatar: 'New Account', type: null, privkey: fileContent['privkey'], pubkey: fileContent['pubkey']));
+    final String encodeData = Account.encodeAccounts(accountState);
+    await storage.write(key: 'database', value: encodeData);
+  }
+
+  Future<void> _openFile(BuildContext context, List<Account> accountState) async {
     rootPath = await getApplicationDocumentsDirectory();
     String path = await FilesystemPicker.open(
       context: context,
@@ -39,18 +51,16 @@ class _OptionButtonState extends State<OptionButton> {
     file = File('$path');
     String contents = await file.readAsString();
     var fileContent = jsonDecode(contents);
-    signaturestate.add(Signature(ethvatar: 'UNKNOWN', type: 'UnknownType', privkey: fileContent['privkey'], pubkey: fileContent['pubkey']));
-    final String encodeData = Signature.encodeSignatures(signaturestate);
+    accountState.add(Account(ethvatar: 'New Account', type: null, privkey: fileContent['privkey'], pubkey: fileContent['pubkey']));
+    final String encodeData = Account.encodeAccounts(accountState);
     await storage.write(key: 'database', value: encodeData);
-    setState(() {
-      filePath = path;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, watch, _) {
-      final signaturestate = watch(signatureListProvider).state;
+      // ignore: invalid_use_of_protected_member
+      final accountState = watch(accountListProvider).state;
       return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: ClipRRect(
@@ -63,9 +73,9 @@ class _OptionButtonState extends State<OptionButton> {
                   if (widget.option == 'Create a new wallet') {
                     Navigator.pop(context);
                     Future.delayed(Duration(seconds: 5));
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateSignature()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateAccount()));
                   } else if (widget.option == 'Import private key as plaintext') {
-                    _openFile(context, signaturestate);
+                    _openFileContent(context, accountState);
                   }
                 },
                 splashColor: Colors.purple,

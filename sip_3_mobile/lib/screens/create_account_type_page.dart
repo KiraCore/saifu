@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:sip_3_mobile/constants.dart';
-import 'package:sip_3_mobile/widgets/create_pgp_widget.dart';
+import 'package:sip_3_mobile/widgets/create_pgp_form.dart';
 
-class SignatureAccount extends StatefulWidget {
+class CreateAccountTypeInterface extends StatefulWidget {
   final String type;
   final String pubkey = '';
   final String privkey = '';
-  SignatureAccount({this.type});
+  CreateAccountTypeInterface({this.type});
 
   @override
-  _SignatureAccountState createState() => _SignatureAccountState();
+  _CreateAccountTypeInterfaceState createState() => _CreateAccountTypeInterfaceState();
 }
 
-class _SignatureAccountState extends State<SignatureAccount> {
+class _CreateAccountTypeInterfaceState extends State<CreateAccountTypeInterface> {
   TextEditingController txtPubController = new TextEditingController();
   TextEditingController txtPrivController = new TextEditingController();
 
@@ -161,8 +161,6 @@ class _SignatureAccountState extends State<SignatureAccount> {
                         Expanded(
                           child: RaisedButton(
                             onPressed: () async {
-                              print(txtPrivController.text);
-                              print(txtPubController.text);
                               await storage.write(key: "keybasePub", value: txtPubController.text);
                               await storage.write(key: "keybasePriv", value: txtPrivController.text);
                             },

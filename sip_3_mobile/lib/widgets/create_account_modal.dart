@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'package:sip_3_mobile/models/signature_model.dart';
-import 'package:sip_3_mobile/screens/create_signature_account.dart';
+import 'package:sip_3_mobile/models/account_model.dart';
+import 'package:sip_3_mobile/screens/create_account_type_page.dart';
 
 // ignore: must_be_immutable
-class CreateSignature extends StatefulWidget {
-  CreateSignature();
+class CreateAccount extends StatefulWidget {
+  CreateAccount();
   @override
-  _CreateSignatureState createState() => _CreateSignatureState();
+  _CreateAccountState createState() => _CreateAccountState();
 }
 
-class _CreateSignatureState extends State<CreateSignature> {
+class _CreateAccountState extends State<CreateAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,17 +53,16 @@ class _CreateSignatureState extends State<CreateSignature> {
               ),
               Expanded(
                 child: ListView.builder(
-                    itemCount: SupportedTypes.signatureTypesSupported.length,
+                    itemCount: AccountTypes.typesSupported.length,
                     itemBuilder: (context, index) {
                       return Card(
                         child: ListTile(
                           onTap: () {
-                            print(SupportedTypes.signatureTypesSupported[index].type.toString());
-                            switch (SupportedTypes.signatureTypesSupported[index].type.toString()) {
+                            switch (AccountTypes.typesSupported[index].type.toString()) {
                               case 'PGP':
                                 {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => SignatureAccount(
+                                      builder: (context) => CreateAccountTypeInterface(
                                             type: 'PGP',
                                           )));
                                 }
@@ -77,7 +76,7 @@ class _CreateSignatureState extends State<CreateSignature> {
                                       isScrollControlled: true,
                                       isDismissible: true,
                                       context: context,
-                                      builder: (context) => SignatureAccount(type: 'KeyBase'));
+                                      builder: (context) => CreateAccountTypeInterface(type: 'KeyBase'));
                                 }
                                 break;
                               default:
@@ -85,10 +84,10 @@ class _CreateSignatureState extends State<CreateSignature> {
                                 break;
                             }
                           },
-                          title: Text(SupportedTypes.signatureTypesSupported[index].type),
+                          title: Text(AccountTypes.typesSupported[index].type),
                           trailing: Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: Image.network(SupportedTypes.signatureTypesSupported[index].image),
+                            child: Image.network(AccountTypes.typesSupported[index].image),
                           ),
                         ),
                       );

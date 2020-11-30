@@ -1,33 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sip_3_mobile/constants.dart';
-import 'package:sip_3_mobile/screens/process_data_screen.dart';
+import 'package:sip_3_mobile/screens/preview_qrcode_page.dart';
 
 const flashOn = 'FLASH ON';
 const flashOff = 'FLASH OFF';
 const frontCamera = 'FRONT CAMERA';
 const backCamera = 'BACK CAMERA';
 
-class QrCodeScanner extends StatefulWidget {
+class QrCodePage extends StatefulWidget {
+  final String type;
   final String pubkey;
   final String privkey;
-  const QrCodeScanner({Key key, this.pubkey, this.privkey}) : super(key: key);
+  const QrCodePage({Key key, this.pubkey, this.privkey, this.type}) : super(key: key);
 
   @override
-  _QrCodeScannerState createState() => _QrCodeScannerState();
+  _QrCodePageState createState() => _QrCodePageState();
 }
 
-class _QrCodeScannerState extends State<QrCodeScanner> {
+class _QrCodePageState extends State<QrCodePage> {
   var flashState = flashOn;
   var cameraState = frontCamera;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController controller;
   //String qrText = '';
   List<String> qrData = [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut id imperdiet purus.',
-    'Nunc vitae lobortis dolor, ac sagittis erat. ',
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+    ""
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    qrData = [
+      "HELLO",
+      "HOW ARE YOU"
+    ];
+  }
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
@@ -153,7 +161,7 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
                           child: Center(
                             child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: qrData.length,
+                              itemCount: qrData.toSet().toList().length,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
                                 return Padding(
@@ -197,10 +205,11 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
                       onPressed: () => Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProcessData(
+                            builder: (context) => PreviewQrCodePage(
+                              type: widget.type,
                               privkey: widget.privkey,
                               pubkey: widget.pubkey,
-                              qrData: qrData,
+                              qrData: qrData.toSet().toList(),
                             ),
                           )),
                       padding: EdgeInsets.all(15),

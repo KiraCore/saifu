@@ -1,15 +1,10 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
-import 'package:encryptions/encryptions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:openpgp/key_options.dart';
 import 'package:openpgp/openpgp.dart';
 import 'package:openpgp/options.dart';
-import 'package:password_hash/salt.dart';
-import 'package:sip_3_mobile/models/signature_model.dart';
-import 'package:sip_3_mobile/screens/main_interface_screen.dart';
+import 'package:sip_3_mobile/models/account_model.dart';
+import 'package:sip_3_mobile/screens/main_interface_page.dart';
 
 import '../constants.dart';
 
@@ -187,7 +182,8 @@ class _CreatePGPAccountFormState extends State<CreatePGPAccountForm> {
                   width: 10,
                 ),
                 Expanded(child: Consumer(builder: (context, watch, _) {
-                  final signaturestate = watch(signatureListProvider).state;
+                  // ignore: invalid_use_of_protected_member
+                  final accountState = watch(accountListProvider).state;
                   return RaisedButton(
                     padding: EdgeInsets.all(15),
                     color: Colors.white,
@@ -197,20 +193,12 @@ class _CreatePGPAccountFormState extends State<CreatePGPAccountForm> {
                       _formKeys[1].currentState.save();
                       _formKeys[2].currentState.save();
                       _formKeys[3].currentState.save();
-
-                      Argon2 argon2 = Argon2(iterations: 16, hashLength: 64, memory: 256, parallelism: 2);
-
                       if (_formKeys[0].currentState.validate() && _formKeys[1].currentState.validate() && _formKeys[2].currentState.validate() && _formKeys[3].currentState.validate()) {
                         var keyOptions = KeyOptions(rsaBits: 1024);
                         var keyPair = await OpenPGP.generate(options: Options(name: _name.trim(), email: _email.trim(), passphrase: _passPhrase.toString(), keyOptions: keyOptions));
-
-                        Uint8List salt = utf8.encode(Salt.generateAsBase64String(4));
-                        Uint8List privateKey = utf8.encode(keyPair.privateKey);
-                        //TODO: //Uint8List encryptedKey = await argon2.argon2id(privateKey, salt);
-                        print(keyPair.privateKey);
                         try {
-                          signaturestate.add(Signature(ethvatar: _name.trim(), type: 'PGP', pubkey: keyPair.publicKey, privkey: keyPair.privateKey));
-                          final String encodeData = Signature.encodeSignatures(signaturestate);
+                          accountState.add(Account(ethvatar: _name.trim(), type: 'PGP', pubkey: keyPair.publicKey, privkey: keyPair.privateKey));
+                          final String encodeData = Account.encodeAccounts(accountState);
                           await storage.write(key: 'database', value: encodeData);
                           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MainInterface()));
                         } catch (e) {

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
-import 'create_account_screen.dart';
+import 'create_login_page.dart';
 
-class OnBoarding extends StatefulWidget {
+class OnBoardingPage extends StatefulWidget {
   @override
-  _OnBoardingState createState() => _OnBoardingState();
+  _OnBoardingPageState createState() => _OnBoardingPageState();
 }
 
-class _OnBoardingState extends State<OnBoarding> {
+class _OnBoardingPageState extends State<OnBoardingPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
 
   void _onIntroEnd(context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => CreateAccount()),
+      MaterialPageRoute(builder: (_) => CeateLoginPage()),
     );
   }
 
@@ -41,19 +41,19 @@ class _OnBoardingState extends State<OnBoarding> {
         PageViewModel(
           title: "Safe and secure",
           body: "Verify and sign transcations offline",
-          image: _buildImage('onboardingImg1'),
+          image: _buildImage('OnBoardingPageImg1'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Non-custodial",
           body: "Take complete control of your assets",
-          image: _buildImage('onboardingImg2'),
+          image: _buildImage('OnBoardingPageImg2'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Generate accounts",
           body: "Create accounts over many supported networks",
-          image: _buildImage('onboardingImg3'),
+          image: _buildImage('OnBoardingPageImg3'),
           decoration: pageDecoration,
         ),
       ],

@@ -32,22 +32,34 @@ class Numpad extends StatelessWidget {
       );
     }
     return Expanded(
-      child: Container(
-        padding: _buttonPadding(),
-        child: FlatButton(
-            shape: CircleBorder(side: BorderSide.none),
-            child: effectiveChild,
-            color: buttonColor,
-            onPressed: () => {
-                  if (passNum == -2)
-                    {
-                      controller.clear(),
-                    }
-                  else
-                    {
-                      controller.text = controller.text + passNum.toString(),
-                    }
-                }),
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Container(
+          padding: _buttonPadding(),
+          decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10,
+              spreadRadius: 0,
+            )
+          ]),
+          child: FlatButton(
+              shape: CircleBorder(
+                side: BorderSide.none,
+              ),
+              child: effectiveChild,
+              color: buttonColor,
+              onPressed: () => {
+                    if (passNum == -2)
+                      {
+                        controller.clear(),
+                      }
+                    else
+                      {
+                        controller.text = controller.text + passNum.toString(),
+                      }
+                  }),
+        ),
       ),
     );
   }

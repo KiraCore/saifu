@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sip_3_mobile/models/signature_model.dart';
-import 'package:sip_3_mobile/screens/create_signature_account.dart';
+
+import 'package:sip_3_mobile/models/account_model.dart';
+import 'package:sip_3_mobile/screens/create_account_type_page.dart';
 
 // ignore: must_be_immutable
-class Introduction extends StatefulWidget {
-  Introduction();
+class IntroductionPage extends StatefulWidget {
+  IntroductionPage();
   @override
-  _IntroductionState createState() => _IntroductionState();
+  _IntroductionPageState createState() => _IntroductionPageState();
 }
 
-class _IntroductionState extends State<Introduction> {
+class _IntroductionPageState extends State<IntroductionPage> {
   @override
   void initState() {
     super.initState();
-    updateStage();
-  }
-
-  void updateStage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('stage', 1);
   }
 
   @override
@@ -65,16 +59,16 @@ class _IntroductionState extends State<Introduction> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                      itemCount: SupportedTypes.signatureTypesSupported.length,
+                      itemCount: AccountTypes.typesSupported.length,
                       itemBuilder: (context, index) {
                         return Card(
                           child: ListTile(
                             onTap: () {
-                              switch (SupportedTypes.signatureTypesSupported[index].type.toString()) {
+                              switch (AccountTypes.typesSupported[index].type.toString()) {
                                 case 'PGP':
                                   {
                                     Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => SignatureAccount(
+                                        builder: (context) => CreateAccountTypeInterface(
                                               type: 'PGP',
                                             )));
                                   }
@@ -84,10 +78,10 @@ class _IntroductionState extends State<Introduction> {
                                   break;
                               }
                             },
-                            title: Text(SupportedTypes.signatureTypesSupported[index].type),
+                            title: Text(AccountTypes.typesSupported[index].type),
                             trailing: Padding(
                               padding: const EdgeInsets.all(5.0),
-                              child: Image.network(SupportedTypes.signatureTypesSupported[index].image),
+                              child: Image.network(AccountTypes.typesSupported[index].image),
                             ),
                           ),
                         );

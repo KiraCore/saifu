@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:password_hash/salt.dart';
-import 'package:sip_3_mobile/screens/introduction_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sip_3_mobile/screens/introduction_page.dart';
 import '../constants.dart';
 
-class CreateAccount extends StatelessWidget {
+class CeateLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,9 +131,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                     if (value.length < 2) return "Name must have more than one character";
                     return null;
                   },
-                  inputFormatters: [
-                    //FilteringTextInputFormatter.deny(RegExp("[ ]"))
-                  ],
+                  inputFormatters: [],
                   decoration: InputDecoration(labelText: 'Account Name', labelStyle: TextStyle(color: Colors.black), helperText: 'This has to be two characters in length.'),
                 ),
               ],
@@ -221,7 +220,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
 
               if (_formKeys[0].currentState.validate() && _formKeys[1].currentState.validate() && _formKeys[2].currentState.validate()) {
                 Uint8List password = utf8.encode(_pin.toString());
-                String generatedSalt = Salt.generateAsBase64String(4);
+                String generatedSalt = Salt.generateAsBase64String(10);
                 Uint8List salt = utf8.encode(generatedSalt);
                 Argon2 argon2 = Argon2(iterations: 16, hashLength: 64, memory: 256, parallelism: 2);
                 Uint8List hash = await argon2.argon2id(password, salt);
@@ -230,10 +229,11 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                   await storage.write(key: "EncryptedPassword", value: hash.toString());
                   await storage.write(key: 'salt', value: generatedSalt);
                   await storage.write(key: 'enabledBiometric', value: enabledBiometric.toString());
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Introduction()));
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  await prefs.setInt('stage', 1);
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => IntroductionPage()));
                 } catch (e) {
                   print('Failed with error code: ${e.code}');
-                  print(e.message);
                 }
               }
             },
