@@ -41,19 +41,19 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Safe and secure",
           body: "Verify and sign transcations offline",
-          image: _buildImage('OnBoardingPageImg1'),
+          image: _buildImage('onboardingImg1'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Non-custodial",
           body: "Take complete control of your assets",
-          image: _buildImage('OnBoardingPageImg2'),
+          image: _buildImage('onboardingImg2'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Generate accounts",
           body: "Create accounts over many supported networks",
-          image: _buildImage('OnBoardingPageImg3'),
+          image: _buildImage('onboardingImg3'),
           decoration: pageDecoration,
         ),
       ],

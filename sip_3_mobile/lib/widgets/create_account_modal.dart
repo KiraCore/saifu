@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sip_3_mobile/models/account_model.dart';
 import 'package:sip_3_mobile/screens/create_account_type_page.dart';
+import 'package:sip_3_mobile/screens/create_kira_screen.dart';
 
 // ignore: must_be_immutable
 class CreateAccount extends StatefulWidget {
@@ -67,16 +68,9 @@ class _CreateAccountState extends State<CreateAccount> {
                                           )));
                                 }
                                 break;
-                              case 'KeyBase':
+                              case 'KIRA':
                                 {
-                                  showModalBottomSheet(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-                                      ),
-                                      isScrollControlled: true,
-                                      isDismissible: true,
-                                      context: context,
-                                      builder: (context) => CreateAccountTypeInterface(type: 'KeyBase'));
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateKiraScreen()));
                                 }
                                 break;
                               default:

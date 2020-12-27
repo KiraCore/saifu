@@ -19,7 +19,10 @@ class AccountTypeDisplay extends StatefulWidget {
   String pubkey;
   String type;
   String privkey;
-  AccountTypeDisplay({Key key, this.ethvatar, this.pubkey, this.type, this.privkey}) : super(key: key);
+  String mnemonic;
+  //final List<String> mnemonic;
+
+  AccountTypeDisplay({Key key, this.ethvatar, this.pubkey, this.type, this.privkey, this.mnemonic}) : super(key: key);
 
   @override
   _AccountTypeDisplayState createState() => _AccountTypeDisplayState();
@@ -214,6 +217,7 @@ class _AccountTypeDisplayState extends State<AccountTypeDisplay> {
                 Expanded(
                   child: RaisedButton(
                     onPressed: () {
+                      /*
                       showModalBottomSheet(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
@@ -222,6 +226,7 @@ class _AccountTypeDisplayState extends State<AccountTypeDisplay> {
                           isDismissible: true,
                           context: context,
                           builder: (context) => VerifyWidget());
+                          */
                     },
                     padding: EdgeInsets.all(15),
                     color: Colors.white,
@@ -240,6 +245,7 @@ class _AccountTypeDisplayState extends State<AccountTypeDisplay> {
                           type: widget.type,
                           privkey: widget.privkey,
                           pubkey: widget.pubkey,
+                          mnemonic: widget.mnemonic,
                         ),
                       ));
                     },
@@ -429,7 +435,7 @@ class _VerifyWidgetState extends State<VerifyWidget> {
                       onChanged: (String val) async {
                         setState(() {
                           _selectedText = val;
-                          print(_selectedText);
+                       
                         });
                       },
                     ),
@@ -442,7 +448,6 @@ class _VerifyWidgetState extends State<VerifyWidget> {
                     Codec<String, String> stringToBase64 = utf8.fuse(base64);
                     String decodedSignature = stringToBase64.decode(signedMessageController.text.toString());
                     // String decodedPublicKey = stringToBase64.decode(publicKeyController.text.toString());
-                    print(_selectedText);
                     var resultVerification = await OpenPGP.verify(decodedSignature, originalMessageController.text, _selectedText);
                     print(resultVerification);
                     Navigator.pop(context);

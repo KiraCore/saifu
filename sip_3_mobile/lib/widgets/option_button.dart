@@ -8,6 +8,7 @@ import 'package:memoryfilepicker/memoryfilepicker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sip_3_mobile/models/account_model.dart';
+import 'package:sip_3_mobile/screens/import_qrcode_page.dart';
 import 'package:sip_3_mobile/widgets/create_account_modal.dart';
 
 import '../constants.dart';
@@ -74,9 +75,12 @@ class _OptionButtonState extends State<OptionButton> {
                     Navigator.pop(context);
                     Future.delayed(Duration(seconds: 5));
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateAccount()));
-                  } else if (widget.option == 'Import private key as plaintext') {
-                    _openFileContent(context, accountState);
+                  } else if (widget.option == 'Import private key via Qrcode') {
+                    showDialog(context: context, builder: (context) => ImportQrcodeScanner());
                   }
+
+                  // } else if (widget.option == 'Import private key as plaintext') {
+                  //_openFileContent(context, accountState);
                 },
                 splashColor: Colors.purple,
                 child: Card(

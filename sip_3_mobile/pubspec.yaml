@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  bip39: ^1.0.3
   encryptions: ^0.0.6
   file_picker: ^1.12.0
   filesystem_picker: ^1.0.3
@@ -42,6 +43,8 @@ dependencies:
   permission_handler: ^5.0.1+1
   qr_code_scanner: ^0.0.13
   qr_flutter: ^3.2.0
+  sacco: ^0.1.5
+  saifu_qr: ^0.0.11
   share: ^0.6.5+4
   shared_preferences: ^0.5.12
 

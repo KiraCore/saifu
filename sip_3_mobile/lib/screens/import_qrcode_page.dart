@@ -1,47 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:sacco/sacco.dart';
 import 'package:sacco/wallet.dart';
 import 'package:sip_3_mobile/constants.dart';
-import 'package:sip_3_mobile/screens/preview_qrcode_page.dart';
+import 'package:sip_3_mobile/models/account_model.dart';
+import 'package:sip_3_mobile/screens/main_interface_page.dart';
 
 const flashOn = 'FLASH ON';
 const flashOff = 'FLASH OFF';
 const frontCamera = 'FRONT CAMERA';
 const backCamera = 'BACK CAMERA';
 
-class QrCodePage extends StatefulWidget {
-  final String type;
-  final String pubkey;
-  final String privkey;
-  final String mnemonic;
-  final Wallet wallet;
-  const QrCodePage({Key key, this.pubkey, this.privkey, this.type, this.mnemonic, this.wallet}) : super(key: key);
-
+class ImportQrcodeScanner extends StatefulWidget {
   @override
-  _QrCodePageState createState() => _QrCodePageState();
+  _ImportQrcodeScannerState createState() => _ImportQrcodeScannerState();
 }
 
-class _QrCodePageState extends State<QrCodePage> {
+class _ImportQrcodeScannerState extends State<ImportQrcodeScanner> {
   var flashState = flashOn;
   var cameraState = frontCamera;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController controller;
   //String qrText = '';
-  List<String> qrData = [
-    ""
-  ];
+  String qrData;
+  final networkInfo = NetworkInfo(
+    bech32Hrp: "kira",
+    lcdUrl: "",
+  );
 
   @override
   void initState() {
     super.initState();
-    qrData = [];
+    qrData = '';
   }
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        qrData.add(scanData);
+        qrData = scanData;
       });
     });
   }
@@ -156,72 +154,54 @@ class _QrCodePageState extends State<QrCodePage> {
                     child: SizedBox(
                       height: 100,
                       width: 100,
-                      child: Container(
-                          color: greys,
-                          child: Center(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: qrData.toSet().toList().length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 20.0, bottom: 20, left: 8),
-                                  child: SizedBox(
-                                    width: 40,
-                                    child: Center(
-                                      child: Container(
-                                        color: Colors.grey[300],
-                                        child: Center(child: Text((index + 1).toString())),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          )),
+                      child: Container(color: greys, child: Center(child: Text('$qrData'))),
                     ),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: RaisedButton(
-                      onPressed: () => Navigator.pop(context),
-                      padding: EdgeInsets.all(15),
-                      color: Colors.white,
-                      textColor: Colors.black,
-                      child: Text('Cancel'),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: RaisedButton(
-                      onPressed: () => Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PreviewQrCodePage(
-                              type: widget.type,
-                              mnemonic: widget.mnemonic,
-                              privkey: widget.privkey,
-                              pubkey: widget.pubkey,
-                              qrData: qrData.toSet().toList(),
-                            ),
-                          )),
-                      padding: EdgeInsets.all(15),
-                      color: Colors.white,
-                      textColor: Colors.black,
-                      child: Text('Continue'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                padding: const EdgeInsets.all(8.0),
+                child: Consumer(builder: (context, watch, _) {
+                  final accountState = watch(accountListProvider).state;
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: RaisedButton(
+                          onPressed: () => Navigator.pop(context),
+                          padding: EdgeInsets.all(15),
+                          color: Colors.white,
+                          textColor: Colors.black,
+                          child: Text('Cancel'),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: RaisedButton(
+                          onPressed: () async {
+                            final mnemonic = qrData.split(" ");
+                            final wallet = Wallet.derive(mnemonic, networkInfo);
+                            try {
+                              accountState.add(Account(ethvatar: 'New Kira Account', type: 'KIRA', pubkey: wallet.bech32Address, privkey: wallet.privateKey.toString(), mnemonic: mnemonic.toString()));
+                              final String encodeData = Account.encodeAccounts(accountState);
+                              await storage.write(key: 'database', value: encodeData);
+                              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MainInterface()));
+                            } catch (e) {
+                              print('Failed with error code: ${e.code}');
+                              print(e.message);
+                            }
+                          },
+                          padding: EdgeInsets.all(15),
+                          color: Colors.white,
+                          textColor: Colors.black,
+                          child: Text('Continue'),
+                        ),
+                      ),
+                    ],
+                  );
+                })),
           ],
         ),
       ),

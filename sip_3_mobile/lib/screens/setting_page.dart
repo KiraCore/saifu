@@ -168,6 +168,7 @@ class _SettingPageState extends State<SettingPage> {
                           onTap: () {},
                           child: ListTile(
                             title: Text('Contact us'),
+                            subtitle: Text("tools@kiracore.com"),
                             trailing: Icon(Icons.arrow_forward_ios),
                           ),
                         ),

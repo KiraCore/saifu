@@ -50,7 +50,6 @@ class _MainPageState extends State<MainPage> {
 
   void createFile(Map<String, dynamic> content, Directory dir, String fileName) {
     File file = new File(dir.path + "/" + fileName);
-    print(file.path);
     file.createSync();
     fileExists = true;
     file.writeAsStringSync(json.encode(content));
@@ -153,7 +152,13 @@ class _MainPageState extends State<MainPage> {
                                                             isScrollControlled: true,
                                                             isDismissible: true,
                                                             context: context,
-                                                            builder: (context) => AccountTypeDisplay(type: accountState[index].type, ethvatar: accountState[index].ethvatar, pubkey: accountState[index].pubkey, privkey: accountState[index].privkey));
+                                                            builder: (context) => AccountTypeDisplay(
+                                                                  type: accountState[index].type,
+                                                                  ethvatar: accountState[index].ethvatar,
+                                                                  pubkey: accountState[index].pubkey,
+                                                                  privkey: accountState[index].privkey,
+                                                                  mnemonic: accountState[index].mnemonic,
+                                                                ));
                                                       },
                                                       title: Padding(
                                                         padding: const EdgeInsets.all(8.0),
@@ -198,6 +203,7 @@ class _MainPageState extends State<MainPage> {
                                                                       }
                                                                   })
                                                             }
+                                                          /*
                                                           else if (value == ListViewOptions.Export)
                                                             {
                                                               fileContent = {
@@ -206,13 +212,16 @@ class _MainPageState extends State<MainPage> {
                                                               },
                                                               createFile(fileContent, dir, 'saifu_wallet_' + accountName + accountState[index].ethvatar)
                                                             }
+                                                            */
                                                         },
                                                         itemBuilder: (BuildContext context) {
                                                           return <PopupMenuEntry<ListViewOptions>>[
+                                                            /*
                                                             PopupMenuItem(
                                                               child: Text('Export'),
                                                               value: ListViewOptions.Export,
                                                             ),
+                                                            */
                                                             PopupMenuItem(
                                                               child: Text('Forget'),
                                                               value: ListViewOptions.Forget,

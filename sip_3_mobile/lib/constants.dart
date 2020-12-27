@@ -5,7 +5,8 @@ final storage = new FlutterSecureStorage();
 const Color greys = Color.fromRGBO(241, 241, 241, 1);
 
 enum ListViewOptions {
-  Export,
+  //TODO: ADD EXPORT WITH PASSWORD
+  // Export,
   Forget,
 }
 

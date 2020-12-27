@@ -73,6 +73,12 @@ class _IntroductionPageState extends State<IntroductionPage> {
                                             )));
                                   }
                                   break;
+                                case 'KIRA':
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => CreateAccountTypeInterface(
+                                            type: 'KIRA',
+                                          )));
+                                  break;
                                 default:
                                   {}
                                   break;

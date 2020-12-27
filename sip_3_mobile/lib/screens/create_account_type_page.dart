@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sip_3_mobile/constants.dart';
+import 'package:sip_3_mobile/screens/create_kira_screen.dart';
 import 'package:sip_3_mobile/widgets/create_pgp_form.dart';
 
 class CreateAccountTypeInterface extends StatefulWidget {
@@ -18,16 +19,8 @@ class _CreateAccountTypeInterfaceState extends State<CreateAccountTypeInterface>
 
   @override
   Widget build(BuildContext context) {
-    return widget.type == 'PGP'
-        ? Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              title: Text(widget.type),
-              elevation: 0.0,
-              centerTitle: true,
-            ),
-            body: CreatePGPAccountForm(),
-          )
+    return widget.type == 'KIRA'
+        ? CreateKiraScreen()
         : Container(
             color: Colors.transparent,
             child: Padding(

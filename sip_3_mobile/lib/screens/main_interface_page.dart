@@ -95,8 +95,8 @@ class _MainInterfaceState extends State<MainInterface> {
                               option: 'Create a new wallet',
                             ),
                             OptionButton(
-                              option: 'Import private key as plaintext',
-                            ),
+                              option: "Import private key via Qrcode",
+                            )
                             /*
                               OptionButton(
                                 option: 'Import private key via key file',

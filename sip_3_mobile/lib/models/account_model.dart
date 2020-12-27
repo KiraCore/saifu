@@ -7,17 +7,21 @@ class Account {
   final String pubkey;
   final String privkey;
 
-  Account({this.type, this.ethvatar, this.pubkey, this.privkey});
+  final String mnemonic;
+
+  Account({this.type, this.ethvatar, this.pubkey, this.privkey, this.mnemonic});
 
   factory Account.fromJson(Map<String, dynamic> jsonData) {
-    return Account(type: jsonData['type'], ethvatar: jsonData['ethvatar'], pubkey: jsonData['pubkey'], privkey: jsonData['privkey']);
+    return Account(type: jsonData['type'], ethvatar: jsonData['ethvatar'], pubkey: jsonData['pubkey'], privkey: jsonData['privkey'], mnemonic: jsonData['mnemonic']);
   }
 
   static Map<String, dynamic> toMap(Account account) => {
         'type': account.type,
         'ethvatar': account.ethvatar,
         'pubkey': account.pubkey,
-        'privkey': account.privkey
+        'privkey': account.privkey,
+        'mnemonic': account.mnemonic.toString(),
+        //'wallet': account.wallet
       };
 
   static String encodeAccounts(List<Account> account) => json.encode(
@@ -34,7 +38,8 @@ class AccountTypes {
   const AccountTypes({this.type, this.image});
 
   static const List<AccountTypes> typesSupported = <AccountTypes>[
-    AccountTypes(type: 'PGP', image: 'https://img.pngio.com/gray-circle-icon-free-gray-shape-icons-grey-circle-png-256_256.png'),
+    //AccountTypes(type: 'PGP', image: 'https://img.pngio.com/gray-circle-icon-free-gray-shape-icons-grey-circle-png-256_256.png'),
+    AccountTypes(type: 'KIRA', image: 'https://res-2.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_256,w_256,f_auto,q_auto:eco/fpkkznhdu7i0bmdzxlqk.png'),
     /*
     AccountTypes(type: 'Bech32', image: 'https://en.bitcoin.it/w/images/en/2/29/BC_Logo_.png'),
     AccountTypes(type: 'P2PKH', image: 'https://img.pngio.com/gray-circle-icon-free-gray-shape-icons-grey-circle-png-256_256.png'),
@@ -48,10 +53,10 @@ class AccountTypes {
 class AccountList extends StateNotifier<List<Account>> {
   AccountList(List<Account> initialList) : super(initialList ?? []);
 
-  void add(String type, String ethvatar, String pubkey, String privkey) {
+  void add(String type, String ethvatar, String pubkey, String privkey, String mnemonic) {
     state = [
       ...state,
-      Account(type: type, ethvatar: ethvatar, pubkey: pubkey, privkey: privkey)
+      Account(type: type, ethvatar: ethvatar, pubkey: pubkey, privkey: privkey, mnemonic: mnemonic)
     ];
   }
 

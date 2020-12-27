@@ -5,7 +5,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class SignedQRCode extends StatefulWidget {
-  var qrData;
+  List<String> qrData;
   var newQRData;
 
   SignedQRCode(List<String> this.qrData);
@@ -26,7 +26,7 @@ class _SignedQRCodeState extends State<SignedQRCode> {
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
-                height: 400,
+                height: 500,
                 child: Swiper(
                   duration: 100,
                   indicatorLayout: PageIndicatorLayout.DROP,
@@ -36,7 +36,7 @@ class _SignedQRCodeState extends State<SignedQRCode> {
                   loop: false,
                   viewportFraction: 0.8,
                   scale: 0.9,
-                  pagination: new SwiperPagination(),
+                  pagination: new RectSwiperPaginationBuilder(),
                   itemBuilder: (BuildContext context, int index) {
                     return Stack(
                       alignment: Alignment.center,
@@ -48,7 +48,7 @@ class _SignedQRCodeState extends State<SignedQRCode> {
                           child: QrImage(
                               data: widget.qrData[index],
                               version: QrVersions.auto,
-                              errorCorrectionLevel: QrErrorCorrectLevel.L,
+                              errorCorrectionLevel: QrErrorCorrectLevel.H,
                               errorStateBuilder: (cxt, err) {
                                 return Container(
                                   child: Center(

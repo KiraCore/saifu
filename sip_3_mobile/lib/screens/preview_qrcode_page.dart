@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:sacco/sacco.dart';
 import 'package:sip_3_mobile/constants.dart';
-import 'package:openpgp/openpgp.dart';
 import 'package:sip_3_mobile/widgets/signedQRCode_modal.dart';
 
 // ignore: must_be_immutable
@@ -12,8 +11,10 @@ class PreviewQrCodePage extends StatefulWidget {
   final String pubkey;
   final String privkey;
   List<String> qrData = [];
+  String mnemonic;
+
   var newQRData = '';
-  PreviewQrCodePage({this.qrData, this.pubkey, this.privkey, this.type});
+  PreviewQrCodePage({this.qrData, this.pubkey, this.privkey, this.type, this.mnemonic});
 
   @override
   _PreviewQrCodePageState createState() => _PreviewQrCodePageState();
@@ -26,7 +27,18 @@ class _PreviewQrCodePageState extends State<PreviewQrCodePage> {
   @override
   void initState() {
     super.initState();
-    txtController.text = widget.qrData.toString();
+    //var data = base64Decode(widget.qrData.toString());
+    //var bytesDecode = utf8.decode(data);
+
+    String data = "";
+    for (var i = 0; i < widget.qrData.length; i++) {
+      data = data + widget.qrData[i];
+    }
+    var stringdata = utf8.decode(base64Decode(data));
+    setState(() {
+      txtController.text = stringdata;
+    });
+
     passwordController.text = '';
   }
 
@@ -89,6 +101,37 @@ class _PreviewQrCodePageState extends State<PreviewQrCodePage> {
                   Expanded(
                     child: RaisedButton(
                       onPressed: () async {
+                        var bytes = utf8.encode(txtController.text);
+                        final networkInfo = NetworkInfo(
+                          bech32Hrp: "kira",
+                          lcdUrl: "",
+                        );
+
+                        final removedBrackets = widget.mnemonic.substring(1, widget.mnemonic.length - 1);
+                        final mnemnonicParts = removedBrackets.split(', ');
+                        final wallet = Wallet.derive(mnemnonicParts, networkInfo);
+                        final signatureData = wallet.signTxData(bytes);
+                        final pubKeyCompressed = wallet.ecPublicKey.Q.getEncoded(true);
+
+                        final parameterOne = base64Encode(signatureData);
+                        final sendbackData = base64Encode(pubKeyCompressed);
+
+                        String ourJsonString = '{"signatureData":"$parameterOne", "pubKeyCompressed":"$sendbackData"}';
+
+                        Navigator.pop(context);
+
+                        showModalBottomSheet(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+                            ),
+                            isScrollControlled: true,
+                            isDismissible: true,
+                            context: context,
+                            builder: (context) => SignedQRCode([
+                                  ourJsonString
+                                ]));
+
+                        /*
                         showModalBottomSheet(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(topLeft: Radius.circular(35), topRight: Radius.circular(35)),
@@ -189,6 +232,7 @@ class _PreviewQrCodePageState extends State<PreviewQrCodePage> {
                             );
                           },
                         );
+                        */
                       },
                       padding: EdgeInsets.all(15),
                       color: Colors.white,
