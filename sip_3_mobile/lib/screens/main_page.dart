@@ -133,15 +133,14 @@ class _MainPageState extends State<MainPage> {
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 10),
                                             child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(35),
+                                              borderRadius: BorderRadius.circular(20),
                                               child: Card(
                                                   elevation: 0.0,
-                                                  color: Colors.white,
                                                   child: InkWell(
-                                                    splashColor: Colors.blue,
                                                     customBorder: RoundedRectangleBorder(
                                                       borderRadius: BorderRadius.circular(10),
                                                     ),
+                                                    splashColor: Colors.purple,
                                                     onTap: () {},
                                                     child: ListTile(
                                                       onTap: () {

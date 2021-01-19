@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sacco/wallet.dart';
@@ -27,9 +29,9 @@ class _QrCodePageState extends State<QrCodePage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController controller;
   //String qrText = '';
-  List<String> qrData = [
-    ""
-  ];
+  List<String> qrData = [];
+  int max = 0;
+  double percentage = 0;
 
   @override
   void initState() {
@@ -37,12 +39,45 @@ class _QrCodePageState extends State<QrCodePage> {
     qrData = [];
   }
 
+  void decodeData(var data) {}
+
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
+
+    // Scans QR code and retrieve information
     controller.scannedDataStream.listen((scanData) {
       setState(() {
+        // Store the scanned information
         qrData.add(scanData);
+
+        //  Decode the information
+        var base64Str = base64.decode(scanData);
+        var bytes = utf8.decode(base64Str);
+        var decodeJson = json.decode(bytes);
+
+        // Retrieves the max amount of pages
+        int max = int.parse(decodeJson['max']);
+        // Compares length of scanned context vs the max amount of pages
+        var datasize = int.parse(qrData.toSet().length.toString());
+        percentage = (datasize / max) * 100;
       });
+
+      // If percentage is 100%, it disposes of camera to stop continued
+      //  scanning which resulted in multiple navigations
+      if (percentage == 100) {
+        controller.dispose();
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PreviewQrCodePage(
+                type: widget.type,
+                mnemonic: widget.mnemonic,
+                privkey: widget.privkey,
+                pubkey: widget.pubkey,
+                qrData: qrData.toSet().toList(),
+              ),
+            ));
+      }
     });
   }
 
@@ -56,7 +91,6 @@ class _QrCodePageState extends State<QrCodePage> {
 
   @override
   void dispose() {
-    controller.dispose();
     super.dispose();
   }
 
@@ -65,6 +99,7 @@ class _QrCodePageState extends State<QrCodePage> {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
                 flex: 5,
@@ -147,38 +182,20 @@ class _QrCodePageState extends State<QrCodePage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'QR Scan \n Place the QR code inside the frame.',
+                      'Place the QR code inside the frame.\n If QR frame has been adjusted, restart this screen',
                       textAlign: TextAlign.center,
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: SizedBox(
-                      height: 100,
-                      width: 100,
-                      child: Container(
-                          color: greys,
-                          child: Center(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: qrData.toSet().toList().length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 20.0, bottom: 20, left: 8),
-                                  child: SizedBox(
-                                    width: 40,
-                                    child: Center(
-                                      child: Container(
-                                        color: Colors.grey[300],
-                                        child: Center(child: Text((index + 1).toString())),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          )),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        CircularProgressIndicator(),
+                        Text(
+                          "${percentage.toStringAsFixed(0)}" + "%",
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
                 ],

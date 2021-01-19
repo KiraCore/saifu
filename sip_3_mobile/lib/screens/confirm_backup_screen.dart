@@ -71,112 +71,123 @@ class _ConfirmBackupState extends State<ConfirmBackup> {
                 maxLines: null,
               ),
             ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          margin: new EdgeInsets.symmetric(vertical: 10.0),
+                          child: Wrap(
+                            spacing: 20,
+                            children: [
+                              for (var word in widget.confirmList)
+                                Wrap(children: [
+                                  Stack(children: [
+                                    RaisedButton(
+                                        onPressed: () {
+                                          txtController.text = txtController.text + ' ' + word;
+
+                                          setState(() {
+                                            widget.matchList.add(word);
+                                            widget.confirmList.remove(word);
+                                          });
+                                        },
+                                        child: Text(word, style: TextStyle(fontWeight: FontWeight.w500)),
+                                        textColor: Colors.black,
+                                        color: Colors.white,
+                                        shape: new RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        )),
+                                  ])
+                                ])
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            IconButton(
+                icon: Icon(Icons.refresh),
+                color: Colors.purple,
+                onPressed: () {
+                  setState(() {
+                    widget.confirmList = List.from(widget.wordList);
+                    txtController.text = "";
+                    widget.matchList = [];
+                    widget.confirmList.shuffle();
+                  });
+                }),
             Column(
               children: [
                 Container(
-                  margin: new EdgeInsets.symmetric(vertical: 10.0),
-                  child: Wrap(
-                    spacing: 20,
-                    children: [
-                      for (var word in widget.confirmList)
-                        Wrap(children: [
-                          Stack(children: [
-                            RaisedButton(
-                                onPressed: () {
-                                  txtController.text = txtController.text + ' ' + word;
-
-                                  setState(() {
-                                    widget.matchList.add(word);
-                                    widget.confirmList.remove(word);
-                                  });
-                                },
-                                child: Text(word, style: TextStyle(fontWeight: FontWeight.w500)),
-                                textColor: Colors.black,
-                                color: Colors.white,
-                                shape: new RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                )),
-                          ])
-                        ])
-                    ],
-                  ),
-                ),
-                IconButton(
-                    icon: Icon(Icons.refresh),
-                    color: Colors.purple,
-                    onPressed: () {
-                      setState(() {
-                        widget.confirmList = List.from(widget.wordList);
-                        txtController.text = "";
-                        widget.matchList = [];
-                        widget.confirmList.shuffle();
-                      });
-                    }),
+                    child: widget.confirmList.isNotEmpty
+                        ? Container()
+                        : listEquals(widget.wordList, widget.matchList)
+                            ? Container(
+                                decoration: BoxDecoration(boxShadow: [
+                                  BoxShadow(color: Colors.grey.withOpacity(0.025), offset: Offset(0, 3))
+                                ]),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 30.0, right: 30, bottom: 10),
+                                  child: RaisedButton(
+                                    onPressed: () async {
+                                      await generateKiraAccount(accountState, wallet, context);
+                                    },
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.done_all_outlined,
+                                            color: Colors.green,
+                                          ),
+                                          Text(
+                                            "Confirm",
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                decoration: BoxDecoration(boxShadow: [
+                                  BoxShadow(color: Colors.grey.withOpacity(0.025), offset: Offset(0, 3))
+                                ]),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 30.0, right: 30, bottom: 10),
+                                  child: RaisedButton(
+                                    onPressed: () {},
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.highlight_off,
+                                            color: Colors.red,
+                                          ),
+                                          Text(
+                                            "Incorrect, try again",
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )),
               ],
             ),
-            Spacer(),
-            Container(
-                child: widget.confirmList.isNotEmpty
-                    ? Container()
-                    : listEquals(widget.wordList, widget.matchList)
-                        ? Container(
-                            decoration: BoxDecoration(boxShadow: [
-                              BoxShadow(color: Colors.grey.withOpacity(0.025), offset: Offset(0, 3))
-                            ]),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 30.0, right: 30, bottom: 10),
-                              child: RaisedButton(
-                                onPressed: () async {
-                                  await generateKiraAccount(accountState, wallet, context);
-                                },
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.done_all_outlined,
-                                        color: Colors.green,
-                                      ),
-                                      Text(
-                                        "Confirm",
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container(
-                            decoration: BoxDecoration(boxShadow: [
-                              BoxShadow(color: Colors.grey.withOpacity(0.025), offset: Offset(0, 3))
-                            ]),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 30.0, right: 30, bottom: 10),
-                              child: RaisedButton(
-                                onPressed: () {},
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.highlight_off,
-                                        color: Colors.red,
-                                      ),
-                                      Text(
-                                        "Incorrect, try again",
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )),
           ],
         ),
       );

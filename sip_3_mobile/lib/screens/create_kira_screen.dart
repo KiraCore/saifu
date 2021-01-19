@@ -46,37 +46,40 @@ class _CreateKiraScreenState extends State<CreateKiraScreen> {
                     ),
                     Expanded(
                         child: SizedBox(
-                            child: Container(
-                      margin: new EdgeInsets.symmetric(vertical: 10.0),
-                      child: Wrap(
-                        spacing: 20,
-                        children: [
-                          for (var word in wordList)
-                            Wrap(children: [
-                              Stack(children: [
-                                RaisedButton(
-                                    onPressed: () {},
-                                    child: Text(word, style: TextStyle(fontWeight: FontWeight.w500)),
-                                    textColor: Colors.black,
-                                    color: Colors.white,
-                                    shape: new RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    )),
-                                Positioned(
-                                    top: 0.0,
-                                    right: 0.0,
-                                    child: Container(
-                                        width: 30,
-                                        height: 20,
-                                        decoration: BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
-                                        child: Center(
-                                            child: Text(
-                                          (wordList.indexOf(word) + 1).toString(),
-                                          style: TextStyle(color: Colors.white),
-                                        )))),
+                            child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Container(
+                        margin: new EdgeInsets.symmetric(vertical: 10.0),
+                        child: Wrap(
+                          spacing: 20,
+                          children: [
+                            for (var word in wordList)
+                              Wrap(children: [
+                                Stack(children: [
+                                  RaisedButton(
+                                      onPressed: () {},
+                                      child: Text(word, style: TextStyle(fontWeight: FontWeight.w500)),
+                                      textColor: Colors.black,
+                                      color: Colors.white,
+                                      shape: new RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      )),
+                                  Positioned(
+                                      top: 0.0,
+                                      right: 0.0,
+                                      child: Container(
+                                          width: 30,
+                                          height: 20,
+                                          decoration: BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
+                                          child: Center(
+                                              child: Text(
+                                            (wordList.indexOf(word) + 1).toString(),
+                                            style: TextStyle(color: Colors.white),
+                                          )))),
+                                ])
                               ])
-                            ])
-                        ],
+                          ],
+                        ),
                       ),
                     ))),
                     RaisedButton(

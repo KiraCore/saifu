@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,7 +8,14 @@ import 'package:sip_3_mobile/screens/login_page.dart';
 import 'screens/onboarding_page.dart';
 
 void main() {
-  runApp(ProviderScope(child: MyApp()));
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp
+  ]).then((_) {
+    runApp(
+      ProviderScope(child: MyApp()),
+    );
+  });
 }
 
 class MyApp extends StatelessWidget {

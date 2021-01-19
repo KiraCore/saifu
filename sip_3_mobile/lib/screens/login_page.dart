@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                       Text(
                         "Enter your pincode or biometrics to gain access",
                         textAlign: TextAlign.start,
-                        style: TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.normal),
+                        style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.normal),
                       ),
                       SizedBox(
                         height: 20,

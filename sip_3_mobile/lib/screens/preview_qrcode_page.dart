@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sacco/sacco.dart';
 import 'package:sip_3_mobile/constants.dart';
+import 'package:sip_3_mobile/screens/qrcode_page.dart';
 import 'package:sip_3_mobile/widgets/signedQRCode_modal.dart';
 
 // ignore: must_be_immutable
@@ -22,30 +23,37 @@ class PreviewQrCodePage extends StatefulWidget {
 
 class _PreviewQrCodePageState extends State<PreviewQrCodePage> {
   TextEditingController txtController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    //var data = base64Decode(widget.qrData.toString());
-    //var bytesDecode = utf8.decode(data);
-
     String data = "";
+    var dataset = [];
+    // Decode the information
     for (var i = 0; i < widget.qrData.length; i++) {
-      data = data + widget.qrData[i];
+      var base64Str = base64.decode(widget.qrData[i]);
+      var bytes = utf8.decode(base64Str);
+      var decodeJson = json.decode(bytes);
+      dataset.add(decodeJson);
     }
-    var stringdata = utf8.decode(base64Decode(data));
-    setState(() {
-      txtController.text = stringdata;
+    // Sort into corrrect page order
+    dataset.sort((m1, m2) {
+      return m1["page"].compareTo(m2["page"]);
     });
 
-    passwordController.text = '';
+    // Iterate sorted information to collect the data to show
+    for (var i = 0; i < dataset.length; i++) {
+      String dataValue = dataset[i]['data'];
+      data = data + dataValue;
+    }
+    setState(() {
+      txtController.text = data;
+    });
   }
 
   @override
   void dispose() {
     txtController.dispose();
-    passwordController.dispose();
     super.dispose();
   }
 
@@ -113,10 +121,10 @@ class _PreviewQrCodePageState extends State<PreviewQrCodePage> {
                         final signatureData = wallet.signTxData(bytes);
                         final pubKeyCompressed = wallet.ecPublicKey.Q.getEncoded(true);
 
-                        final parameterOne = base64Encode(signatureData);
-                        final sendbackData = base64Encode(pubKeyCompressed);
+                        final base64Signature = base64Encode(signatureData);
+                        final base64PubKey = base64Encode(pubKeyCompressed);
 
-                        String ourJsonString = '{"signatureData":"$parameterOne", "pubKeyCompressed":"$sendbackData"}';
+                        String ourJsonString = '{"signatureData":"$base64Signature", "pubKeyCompressed":"$base64PubKey"}';
 
                         Navigator.pop(context);
 
@@ -130,109 +138,6 @@ class _PreviewQrCodePageState extends State<PreviewQrCodePage> {
                             builder: (context) => SignedQRCode([
                                   ourJsonString
                                 ]));
-
-                        /*
-                        showModalBottomSheet(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(35), topRight: Radius.circular(35)),
-                          ),
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                left: 20,
-                                right: 20,
-                                top: 20,
-                                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-                              ),
-                              child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      flex: 10,
-                                      child: TextField(
-                                        autofocus: true,
-                                        obscureText: true,
-                                        controller: passwordController,
-                                        decoration: InputDecoration(
-                                            labelText: 'Enter your passphrase',
-                                            helperText: 'This has to this selected account passphrase.',
-                                            labelStyle: TextStyle(color: Colors.black),
-                                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                                            enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                                              borderSide: BorderSide(color: Colors.grey, width: 1),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                              borderSide: BorderSide(color: Colors.grey, width: 2),
-                                            )),
-                                      ),
-                                    ),
-                                    RaisedButton(
-                                      color: Colors.white,
-                                      onPressed: () async {
-                                        print(widget.type);
-                                        try {
-                                          switch (widget.type) {
-                                            case "PGP":
-                                              var result = await OpenPGP.sign(txtController.text, widget.pubkey, widget.privkey, passwordController.text);
-                                              Codec<String, String> stringToBase64 = utf8.fuse(base64);
-                                              String encoded = stringToBase64.encode(result);
-
-                                              List<String> data = [
-                                                encoded
-                                              ];
-                                              Navigator.pop(context);
-                                              showModalBottomSheet(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-                                                  ),
-                                                  isScrollControlled: true,
-                                                  isDismissible: true,
-                                                  context: context,
-                                                  builder: (context) => SignedQRCode(data));
-                                              break;
-                                            default:
-                                              showModalBottomSheet(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-                                                  ),
-                                                  isScrollControlled: true,
-                                                  isDismissible: true,
-                                                  context: context,
-                                                  builder: (context) => SignedQRCode(widget.qrData));
-                                          }
-                                          passwordController.text = '';
-
-/*
-                                          showModalBottomSheet(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-                                              ),
-                                              isScrollControlled: true,
-                                              isDismissible: true,
-                                              context: context,
-                                              builder: (context) => SignedQRCode(widget.qrData));
-                                              */
-                                        } on PlatformException catch (err) {
-                                          print(err);
-                                          //TODO Handle err
-                                        } catch (err) {
-                                          //TODO other types of Exceptions
-                                        }
-                                      },
-                                      child: Text('Submit'),
-                                    ),
-                                  ],
-                                ),
-                              ]),
-                            );
-                          },
-                        );
-                        */
                       },
                       padding: EdgeInsets.all(15),
                       color: Colors.white,

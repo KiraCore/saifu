@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sip_3_mobile/main.dart';
 import 'package:sip_3_mobile/screens/login_page.dart';
 
@@ -50,11 +51,14 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       navigatorKey: _navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          //splashColor: Colors.deepPurple,
+          //highlightColor: Colors.deepPurple,
+          accentColor: Colors.purple,
           primaryColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          textTheme: Theme.of(context).textTheme.apply(
+          textTheme: GoogleFonts.arimoTextTheme(Theme.of(context).textTheme.apply(
                 fontFamily: 'Open Sans',
-              )),
+              ))),
       home: SplashScreen(),
     );
   }

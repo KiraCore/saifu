@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sip_3_mobile/constants.dart';
 import 'package:sip_3_mobile/screens/create_kira_screen.dart';
-import 'package:sip_3_mobile/widgets/create_pgp_form.dart';
+
 
 class CreateAccountTypeInterface extends StatefulWidget {
   final String type;
