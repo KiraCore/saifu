@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sip_3_mobile/screens/change_password_page.dart';
+import 'package:sip_3_mobile/screens/change_password.dart';
 
-class SettingPage extends StatefulWidget {
+class Setting extends StatefulWidget {
   @override
-  _SettingPageState createState() => _SettingPageState();
+  _SettingState createState() => _SettingState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(

@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:sip_3_mobile/screens/confirm_backup_screen.dart';
+import 'package:sip_3_mobile/screens/confirm_backup.dart';
+import 'package:sip_3_mobile/widgets/custom_button.dart';
 
-class CreateKiraScreen extends StatefulWidget {
+class CreateKiraAccount extends StatefulWidget {
   @override
-  _CreateKiraScreenState createState() => _CreateKiraScreenState();
+  _CreateKiraAccountState createState() => _CreateKiraAccountState();
 }
 
-class _CreateKiraScreenState extends State<CreateKiraScreen> {
+class _CreateKiraAccountState extends State<CreateKiraAccount> {
   String mnemonic;
   List<String> wordList;
-  String seed;
   @override
   void initState() {
     this.mnemonic = bip39.generateMnemonic(strength: 256);
@@ -22,6 +22,7 @@ class _CreateKiraScreenState extends State<CreateKiraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         elevation: 0.0,
@@ -82,28 +83,12 @@ class _CreateKiraScreenState extends State<CreateKiraScreen> {
                         ),
                       ),
                     ))),
-                    RaisedButton(
-                      onPressed: () {
+                    CustomButton(
+                      style: 1,
+                      text: "I confirm, I've made a backup of my seed",
+                      onButtonClick: () {
                         Navigator.of(context).pushReplacement(new CupertinoPageRoute(builder: (context) => new ConfirmBackup(wordList)));
                       },
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.warning_amber_outlined,
-                              color: Colors.purple,
-                            ),
-                            Expanded(
-                                child: Text(
-                              "I confirm, I've made a backup of my seed",
-                              textAlign: TextAlign.center,
-                            )),
-                          ],
-                        ),
-                      ),
                     ),
                     SizedBox(
                       height: 10,

@@ -1,22 +1,22 @@
 import 'dart:convert';
 import 'dart:typed_data';
+
 import 'package:encryptions/encryptions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:local_auth/error_codes.dart' as auth_error;
 import 'package:local_auth/local_auth.dart';
 import 'package:sip_3_mobile/constants.dart';
-import 'package:sip_3_mobile/screens/main_interface_page.dart';
+import 'package:sip_3_mobile/screens/main_interface.dart';
 import 'package:sip_3_mobile/widgets/password_keyboard.dart';
 
-class LoginPage extends StatefulWidget {
+class Login extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginState createState() => _LoginState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginState extends State<Login> {
   String _pincode;
   String _salt;
   bool _enabledBiometric = false;
@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> retrieveInformation() async {
+  Future<void> _retrieveInformation() async {
     String enabledBiometric = await storage.read(key: 'enabledBiometric');
     String password = await storage.read(key: "EncryptedPassword");
     String salt = await storage.read(key: 'salt');
@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    retrieveInformation();
+    _retrieveInformation();
     _controller.addListener(() async {
       Uint8List password = utf8.encode(_controller.text);
       Uint8List salt = utf8.encode(_salt);

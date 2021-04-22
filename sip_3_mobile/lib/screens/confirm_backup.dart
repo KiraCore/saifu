@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sacco/sacco.dart';
 import 'package:sip_3_mobile/constants.dart';
-import 'package:sip_3_mobile/models/account_model.dart';
-import 'package:sip_3_mobile/screens/main_interface_page.dart';
+import 'package:sip_3_mobile/models/account.dart';
+import 'package:sip_3_mobile/screens/main_interface.dart';
+import 'package:sip_3_mobile/widgets/custom_button.dart';
 
+// ignore: must_be_immutable
 class ConfirmBackup extends StatefulWidget {
   List<String> wordList;
   List<String> confirmList;
   List<String> matchList = [];
-  var mnemonic;
-  var wallet;
   ConfirmBackup(this.wordList);
 
   @override
@@ -44,12 +44,13 @@ class _ConfirmBackupState extends State<ConfirmBackup> {
           elevation: 0.0,
           centerTitle: true,
           actions: [
-            FlatButton(
-              onPressed: () async {
+            CustomButton(
+              style: 5,
+              text: "Skip",
+              onButtonClick: () async {
                 await generateKiraAccount(accountState, wallet, context);
               },
-              child: Text('Skip'),
-            )
+            ),
           ],
         ),
         body: Column(
@@ -133,58 +134,25 @@ class _ConfirmBackupState extends State<ConfirmBackup> {
                                   BoxShadow(color: Colors.grey.withOpacity(0.025), offset: Offset(0, 3))
                                 ]),
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 30.0, right: 30, bottom: 10),
-                                  child: RaisedButton(
-                                    onPressed: () async {
-                                      await generateKiraAccount(accountState, wallet, context);
-                                    },
-                                    color: Colors.white,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.done_all_outlined,
-                                            color: Colors.green,
-                                          ),
-                                          Text(
-                                            "Confirm",
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                    padding: const EdgeInsets.only(left: 30.0, right: 30, bottom: 10),
+                                    child: CustomButton(
+                                      onButtonClick: () async {
+                                        await generateKiraAccount(accountState, wallet, context);
+                                      },
+                                      style: 1,
+                                      text: "Confirm",
+                                    )),
                               )
                             : Container(
                                 decoration: BoxDecoration(boxShadow: [
                                   BoxShadow(color: Colors.grey.withOpacity(0.025), offset: Offset(0, 3))
                                 ]),
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 30.0, right: 30, bottom: 10),
-                                  child: RaisedButton(
-                                    onPressed: () {},
-                                    color: Colors.white,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.highlight_off,
-                                            color: Colors.red,
-                                          ),
-                                          Text(
-                                            "Incorrect, try again",
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                    padding: const EdgeInsets.only(left: 30.0, right: 30, bottom: 10),
+                                    child: CustomButton(
+                                      style: 1,
+                                      text: "Incorrecct, try again",
+                                    )),
                               )),
               ],
             ),
@@ -195,9 +163,12 @@ class _ConfirmBackupState extends State<ConfirmBackup> {
   }
 
   Future generateKiraAccount(List<Account> accountState, Wallet wallet, BuildContext context) async {
-    try {
-      accountState.add(Account(ethvatar: 'New Kira Account', type: 'KIRA', pubkey: wallet.bech32Address, privkey: wallet.privateKey.toString(), mnemonic: widget.wordList.toString()));
+    var mnemonic = widget.wordList.toString();
+    var mnemonicString = mnemonic.substring(1, mnemonic.length - 1);
+    var newphrases = mnemonicString.replaceAll(new RegExp(r'[^\w\s]+'), '');
 
+    try {
+      accountState.add(Account(ethvatar: 'New Kira Account', type: 'KIRA', pubkey: wallet.bech32Address, privkey: wallet.privateKey.toString(), mnemonic: newphrases));
       final String encodeData = Account.encodeAccounts(accountState);
       await storage.write(key: 'database', value: encodeData);
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MainInterface()));

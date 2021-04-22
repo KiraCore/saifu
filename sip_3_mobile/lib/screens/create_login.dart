@@ -1,16 +1,17 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
+
 import 'package:encryptions/encryptions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:password_hash/salt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sip_3_mobile/screens/introduction_page.dart';
-import '../constants.dart';
+import 'package:sip_3_mobile/constants.dart';
+import 'package:sip_3_mobile/widgets/create_account.dart';
+import 'package:sip_3_mobile/widgets/custom_button.dart';
 
-class CeateLoginPage extends StatelessWidget {
+class CeateLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,6 +105,31 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     });
   }
 
+  _createAccount() async {
+    _formKeys[0].currentState.save();
+    _formKeys[1].currentState.save();
+    _formKeys[2].currentState.save();
+
+    if (_formKeys[0].currentState.validate() && _formKeys[1].currentState.validate() && _formKeys[2].currentState.validate()) {
+      Uint8List password = utf8.encode(_pin.toString());
+      String generatedSalt = Salt.generateAsBase64String(10);
+      Uint8List salt = utf8.encode(generatedSalt);
+      Argon2 argon2 = Argon2(iterations: 16, hashLength: 64, memory: 256, parallelism: 2);
+      Uint8List hash = await argon2.argon2id(password, salt);
+      try {
+        await storage.write(key: "AccountName", value: _name.trim());
+        await storage.write(key: "EncryptedPassword", value: hash.toString());
+        await storage.write(key: 'salt', value: generatedSalt);
+        await storage.write(key: 'enabledBiometric', value: enabledBiometric.toString());
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setInt('stage', 1);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => CreateAccount()));
+      } catch (e) {
+        print('Failed with error code: ${e.code}');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -183,7 +209,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                   if (value.isEmpty) return "You can't have an empty Pin";
                   if (value.length < 4) return "Pin must be more than 3 digits";
                   if (_pin != _confirmPin) return "Pin number doesn't match";
-                  if (value.length > 12) return "Pin must have a max of 12 digits";
+                  if (value.length > 10) return "Pin must have a max of 10 digits";
                   return null;
                 },
                 decoration: InputDecoration(labelText: 'Confirm Pin Number', labelStyle: TextStyle(color: Colors.black), helperText: 'Re-enter the same pin. Pin numbers must match'),
@@ -206,37 +232,12 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                     }
                   });
                 },
-                activeColor: Colors.grey),
+                activeColor: Colors.black),
           ),
-          RaisedButton(
-            textColor: Colors.black,
-            padding: EdgeInsets.all(15),
-            color: Colors.white,
-            child: Text('Create account'),
-            onPressed: () async {
-              _formKeys[0].currentState.save();
-              _formKeys[1].currentState.save();
-              _formKeys[2].currentState.save();
-
-              if (_formKeys[0].currentState.validate() && _formKeys[1].currentState.validate() && _formKeys[2].currentState.validate()) {
-                Uint8List password = utf8.encode(_pin.toString());
-                String generatedSalt = Salt.generateAsBase64String(10);
-                Uint8List salt = utf8.encode(generatedSalt);
-                Argon2 argon2 = Argon2(iterations: 16, hashLength: 64, memory: 256, parallelism: 2);
-                Uint8List hash = await argon2.argon2id(password, salt);
-                try {
-                  await storage.write(key: "AccountName", value: _name.trim());
-                  await storage.write(key: "EncryptedPassword", value: hash.toString());
-                  await storage.write(key: 'salt', value: generatedSalt);
-                  await storage.write(key: 'enabledBiometric', value: enabledBiometric.toString());
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  await prefs.setInt('stage', 1);
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => IntroductionPage()));
-                } catch (e) {
-                  print('Failed with error code: ${e.code}');
-                }
-              }
-            },
+          CustomButton(
+            style: 1,
+            text: "Create Account",
+            onButtonClick: _createAccount,
           ),
         ],
       ),

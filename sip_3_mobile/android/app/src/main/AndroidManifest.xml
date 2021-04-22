@@ -13,7 +13,7 @@
              android:allowBackup="false"
             android:fullBackupContent="false"
         android:name="io.flutter.app.FlutterApplication"
-        android:label="sip_3_mobile"
+        android:label="Saifu"
         android:icon="@mipmap/ic_launcher">
         <activity
 

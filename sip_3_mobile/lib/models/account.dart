@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:flutter_riverpod/all.dart';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Account {
   final String type;
@@ -38,15 +39,7 @@ class AccountTypes {
   const AccountTypes({this.type, this.image});
 
   static const List<AccountTypes> typesSupported = <AccountTypes>[
-    //AccountTypes(type: 'PGP', image: 'https://img.pngio.com/gray-circle-icon-free-gray-shape-icons-grey-circle-png-256_256.png'),
     AccountTypes(type: 'KIRA', image: 'https://res-2.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_256,w_256,f_auto,q_auto:eco/fpkkznhdu7i0bmdzxlqk.png'),
-    /*
-    AccountTypes(type: 'Bech32', image: 'https://en.bitcoin.it/w/images/en/2/29/BC_Logo_.png'),
-    AccountTypes(type: 'P2PKH', image: 'https://img.pngio.com/gray-circle-icon-free-gray-shape-icons-grey-circle-png-256_256.png'),
-    AccountTypes(type: 'P2SH', image: 'https://img.pngio.com/gray-circle-icon-free-gray-shape-icons-grey-circle-png-256_256.png'),
-    AccountTypes(type: 'Ethereum', image: 'https://cdn.iconscout.com/icon/free/png-256/ethereum-16-646072.png'),
-    AccountTypes(type: 'KeyBase', image: 'https://res-3.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_256,w_256,f_auto,q_auto:eco/v1505765479/zghucdtjjevivjihplty.png'),
-    */
   ];
 }
 

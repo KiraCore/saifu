@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 
-import 'package:sip_3_mobile/models/account_model.dart';
-import 'package:sip_3_mobile/screens/create_account_type_page.dart';
+import 'package:sip_3_mobile/models/account.dart';
+import 'package:sip_3_mobile/screens/create_kira_account.dart';
+import 'package:sip_3_mobile/screens/main_interface.dart';
 
 // ignore: must_be_immutable
-class IntroductionPage extends StatefulWidget {
-  IntroductionPage();
+class CreateAccount extends StatefulWidget {
+  CreateAccount();
   @override
-  _IntroductionPageState createState() => _IntroductionPageState();
+  _CreateAccountState createState() => _CreateAccountState();
 }
 
-class _IntroductionPageState extends State<IntroductionPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class _CreateAccountState extends State<CreateAccount> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => MainInterface())),
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
+        appBar: AppBar(
+          elevation: 0.0,
+        ),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -29,9 +29,6 @@ class _IntroductionPageState extends State<IntroductionPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                SizedBox(
-                  height: 50,
-                ),
                 Text(
                   "Saifu",
                   style: TextStyle(fontSize: 40, color: Colors.black),
@@ -46,7 +43,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                   height: 20,
                 ),
                 Text(
-                  "Select a signature type to start.",
+                  "Select a signature type to create.",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 20,
@@ -65,19 +62,10 @@ class _IntroductionPageState extends State<IntroductionPage> {
                           child: ListTile(
                             onTap: () {
                               switch (AccountTypes.typesSupported[index].type.toString()) {
-                                case 'PGP':
-                                  {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => CreateAccountTypeInterface(
-                                              type: 'PGP',
-                                            )));
-                                  }
-                                  break;
                                 case 'KIRA':
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => CreateAccountTypeInterface(
-                                            type: 'KIRA',
-                                          )));
+                                  {
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateKiraAccount()));
+                                  }
                                   break;
                                 default:
                                   {}

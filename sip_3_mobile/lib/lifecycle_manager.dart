@@ -1,32 +1,39 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sip_3_mobile/main.dart';
-import 'package:sip_3_mobile/screens/login_page.dart';
+import 'package:sip_3_mobile/screens/login.dart';
 
-class LifeCycleManager extends StatefulWidget {
+class MobileLifeCycle extends StatefulWidget {
   final Widget child;
 
-  const LifeCycleManager({Key key, this.child}) : super(key: key);
+  const MobileLifeCycle({Key key, this.child}) : super(key: key);
   @override
-  _LifeCycleManagerState createState() => _LifeCycleManagerState();
+  _MobileLifeCycleState createState() => _MobileLifeCycleState();
 }
 
-class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBindingObserver {
+class _MobileLifeCycleState extends State<MobileLifeCycle> with WidgetsBindingObserver {
   StreamController<bool> _showLockScreenStream = StreamController();
   StreamSubscription _showLockScreenSubs;
   GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
-
+  int stage;
   @override
   void initState() {
+    getStage();
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
     _showLockScreenSubs = _showLockScreenStream.stream.listen((bool show) {
-      if (mounted && show) {
+      if (mounted && show && stage != 0) {
         _showLockScreenDialog();
       }
     });
+  }
+
+  Future getStage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    stage = (prefs.getInt('stage') ?? 0);
   }
 
   @override
@@ -51,8 +58,8 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       navigatorKey: _navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          //splashColor: Colors.deepPurple,
-          //highlightColor: Colors.deepPurple,
+          // splashColor: Colors.purple,
+          //highlightColor: Colors.purple,
           accentColor: Colors.purple,
           primaryColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -65,7 +72,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
   void _showLockScreenDialog() {
     _navigatorKey.currentState.pushReplacement(new MaterialPageRoute(builder: (BuildContext context) {
-      return LoginPage();
+      return Login();
     }));
   }
 }

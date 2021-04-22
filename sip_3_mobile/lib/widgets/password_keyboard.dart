@@ -36,18 +36,16 @@ class Numpad extends StatelessWidget {
         padding: const EdgeInsets.all(5.0),
         child: Container(
           padding: _buttonPadding(),
-          /*
           decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, boxShadow: [
             BoxShadow(
               color: Colors.black12,
-              blurRadius: 10,
+              blurRadius: 0,
               spreadRadius: 0,
             )
-           
-          ]), */
+          ]),
           child: FlatButton(
               shape: CircleBorder(
-                side: BorderSide.none,
+                side: BorderSide(color: Colors.black),
               ),
               child: effectiveChild,
               color: buttonColor,

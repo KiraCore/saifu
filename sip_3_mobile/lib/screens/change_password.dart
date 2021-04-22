@@ -1,12 +1,11 @@
+import 'dart:convert';
 import 'dart:typed_data';
+
+import 'package:encryptions/encryptions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sip_3_mobile/constants.dart';
-import 'dart:convert';
-import 'package:encryptions/encryptions.dart';
-import 'dart:async';
-import 'package:flutter/cupertino.dart';
 
 class ChanagePasswordModal extends StatefulWidget {
   const ChanagePasswordModal({
@@ -242,8 +241,8 @@ class _ChanagePasswordModalState extends State<ChanagePasswordModal> {
                       Navigator.pop(context);
                     } on PlatformException catch (err) {
                       print(err);
-                      //TODO Handle err
                     } catch (err) {
+                      print(err);
                       //TODO other types of Exceptions
                     }
                   }
