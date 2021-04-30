@@ -11,25 +11,25 @@ import 'package:sip_3_mobile/constants.dart';
 import 'package:sip_3_mobile/widgets/create_account.dart';
 import 'package:sip_3_mobile/widgets/custom_button.dart';
 
+// Screen for creating an User Account
+
 class CeateLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text('Create an account'),
-        automaticallyImplyLeading: false,
-        elevation: 0.0,
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: CreateAccountForm(),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text('Create an account'),
+          automaticallyImplyLeading: false,
+          elevation: 0.0,
+          centerTitle: true,
         ),
-      ),
-    );
+        body: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: CreateAccountForm(),
+            )));
   }
 }
 
@@ -46,18 +46,13 @@ List<GlobalKey<FormState>> _formKeys = [
 ];
 
 class _CreateAccountFormState extends State<CreateAccountForm> {
-  FocusNode fname;
-  FocusNode fpin;
-  FocusNode fconfirmPin;
-
-  String _name;
-  String _pin;
-  String _confirmPin;
-
+  FocusNode fname, fpin, fconfirmPin;
+  String _name, _pin, _confirmPin;
   LocalAuthentication auth = LocalAuthentication();
   bool enabledBiometric = false;
   bool isSwitched = false;
 
+// When loaded, set's up the required focus components
   @override
   void initState() {
     super.initState();
@@ -66,6 +61,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     fconfirmPin = FocusNode();
   }
 
+// When the screen is disposed, it removes components
   @override
   void dispose() {
     fname.dispose();
@@ -74,6 +70,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     super.dispose();
   }
 
+  // Eanbles biometric authentication
   Future<void> _authenticate() async {
     bool authenticated = false;
     try {
@@ -89,6 +86,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     });
   }
 
+  // Disables biometric authentication
   Future<void> _stopAuthentication() async {
     bool stopAuthentication = false;
     try {
@@ -105,7 +103,10 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     });
   }
 
-  _createAccount() async {
+  // Checks for validations of the login fields.
+  // Once it is valid, it encodes and stores these
+  // If this is successful, it will navigate the screen to create a blockchain account
+  _createUser() async {
     _formKeys[0].currentState.save();
     _formKeys[1].currentState.save();
     _formKeys[2].currentState.save();
@@ -130,65 +131,60 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     }
   }
 
+// Builds the user interface, displays validcation and results of validations.
+// Calls on functions and puts focus on fields that needs User's attention, it also includes helper messages
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
           Form(
-            key: _formKeys[0],
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              children: <Widget>[
+              key: _formKeys[0],
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Column(children: <Widget>[
                 TextFormField(
-                  autofocus: true,
-                  focusNode: fname,
+                    autofocus: true,
+                    focusNode: fname,
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) {
+                      fname.unfocus();
+                      FocusScope.of(context).requestFocus(fpin);
+                    },
+                    style: TextStyle(color: Colors.black),
+                    onSaved: (String val) => setState(() => _name = val),
+                    validator: (value) {
+                      if (value.isEmpty) return "You can't have an empty name";
+                      if (value.length < 2) return "Name must have more than one character";
+                      return null;
+                    },
+                    inputFormatters: [],
+                    decoration: InputDecoration(labelText: 'Account Name', labelStyle: TextStyle(color: Colors.black), helperText: 'This has to be two characters in length.'))
+              ])),
+          Form(
+              key: _formKeys[1],
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: TextFormField(
+                  autofocus: false,
+                  focusNode: fpin,
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) {
-                    fname.unfocus();
-                    FocusScope.of(context).requestFocus(fpin);
+                    fpin.unfocus();
+                    FocusScope.of(context).requestFocus(fconfirmPin);
                   },
-                  style: TextStyle(color: Colors.black),
-                  onSaved: (String val) => setState(() => _name = val),
+                  obscureText: true,
+                  onSaved: (String val) => setState(() => _pin = val),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
                   validator: (value) {
-                    if (value.isEmpty) return "You can't have an empty name";
-                    if (value.length < 2) return "Name must have more than one character";
+                    if (value.isEmpty) return "You can't have an empty Pin";
+                    if (value.length < 4) return "Pin must be more than 3 digits";
+                    if (value.length > 10) return "Pin must have a max of 10 digits";
                     return null;
                   },
-                  inputFormatters: [],
-                  decoration: InputDecoration(labelText: 'Account Name', labelStyle: TextStyle(color: Colors.black), helperText: 'This has to be two characters in length.'),
-                ),
-              ],
-            ),
-          ),
-          Form(
-            key: _formKeys[1],
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: TextFormField(
-              autofocus: false,
-              focusNode: fpin,
-              textInputAction: TextInputAction.next,
-              onFieldSubmitted: (_) {
-                fpin.unfocus();
-                FocusScope.of(context).requestFocus(fconfirmPin);
-              },
-              obscureText: true,
-              onSaved: (String val) => setState(() => _pin = val),
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
-              ],
-              validator: (value) {
-                if (value.isEmpty) return "You can't have an empty Pin";
-                if (value.length < 4) return "Pin must be more than 3 digits";
-                if (value.length > 10) return "Pin must have a max of 10 digits";
-                return null;
-              },
-              decoration: InputDecoration(labelText: 'Pin Number', labelStyle: TextStyle(color: Colors.black), helperText: 'This has to be at least 4 digits in length'),
-            ),
-          ),
+                  decoration: InputDecoration(labelText: 'Pin Number', labelStyle: TextStyle(color: Colors.black), helperText: 'This has to be at least 4 digits in length'))),
           Form(
               key: _formKeys[2],
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -234,13 +230,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
                 },
                 activeColor: Colors.black),
           ),
-          CustomButton(
-            style: 1,
-            text: "Create Account",
-            onButtonClick: _createAccount,
-          ),
-        ],
-      ),
-    );
+          CustomButton(style: 1, text: "Create Account", onButtonClick: _createUser)
+        ]));
   }
 }

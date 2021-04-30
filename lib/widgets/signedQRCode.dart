@@ -13,12 +13,28 @@ class SignedQRCode extends StatefulWidget {
 }
 
 class _SignedQRCodeState extends State<SignedQRCode> {
+
+  // When the screen is loaded, it breaks the signed transcation into 100 chracters limit
+  @override
+  void initState() {
+    // Calls the function to handle this.
+    frameSignature(widget.signedData, 100);
+    super.initState();
+  }
+
+  // Function that recieves the data and the limit defined
   void frameSignature(var data, var splitValue) {
+    // Splits the data
     RegExp frames = new RegExp(".{1," + splitValue.toStringAsFixed(0) + "}");
+    // Encodes by utf8, base64
     String str = base64.encode(utf8.encode(data));
+
+    //  Arranges the broken down data into a list
     Iterable<Match> matches = frames.allMatches(str);
     var list = matches.map((m) => m.group(0)).toList();
     widget.frameData = [];
+
+    // Creates the structure of Qr code frame(s) and arranges the data inside them
     for (var i = 0; i < list.length; i++) {
       var pageCount = i + 1;
       var framesData = {
@@ -26,17 +42,19 @@ class _SignedQRCodeState extends State<SignedQRCode> {
         "page": pageCount,
         "data": list[i]
       };
+
+      // Data is converted into JSON format
       var jsonFrame = jsonEncode(framesData);
+
+      // Once data is split, broken into chuncks, added into a list and the
+      //  data for the QR codes are arranged. 
+      // It is grouped together for each QR frame and stored into a List. 
+      // Each list has a frame (with max, page, data). For every frame there 
+      // is a QR code being produced. 
       setState(() {
         widget.frameData.add(jsonFrame);
       });
     }
-  }
-
-  @override
-  void initState() {
-    frameSignature(widget.signedData, 100);
-    super.initState();
   }
 
   @override

@@ -1,2 +1,0 @@
-# saifu
-Kira Signer App
