@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sacco/wallet.dart';
-import 'package:sip_3_mobile/constants.dart';
-import 'package:sip_3_mobile/screens/preview_qrcode.dart';
-import 'package:sip_3_mobile/widgets/custom_button.dart';
+import 'package:saifu/screens/preview_qrcode.dart';
+import 'package:saifu/widgets/custom_button.dart';
 
 const flashOn = 'FLASH ON';
 const flashOff = 'FLASH OFF';
@@ -197,20 +196,21 @@ class _QrCodePageState extends State<QrCodePage> {
                   ),
                   Expanded(
                       child: CustomButton(
-                    text: "Continue",
-                    style: 1,
-                    onButtonClick: () => Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PreviewQrCode(
-                            type: widget.type,
-                            mnemonic: widget.mnemonic,
-                            privkey: widget.privkey,
-                            pubkey: widget.pubkey,
-                            qrData: qrData.toSet().toList(),
-                          ),
-                        )),
-                  )),
+                          text: "Continue",
+                          style: 1,
+                          onButtonClick: () {
+                            if (qrData.length > 0)
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PreviewQrCode(
+                                            type: widget.type,
+                                            mnemonic: widget.mnemonic,
+                                            privkey: widget.privkey,
+                                            pubkey: widget.pubkey,
+                                            qrData: qrData.toSet().toList(),
+                                          )));
+                          }))
                 ],
               ),
             ),

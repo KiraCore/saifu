@@ -7,9 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:password_hash/salt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sip_3_mobile/constants.dart';
-import 'package:sip_3_mobile/widgets/create_account.dart';
-import 'package:sip_3_mobile/widgets/custom_button.dart';
+import 'package:saifu/constants.dart';
+import 'package:saifu/widgets/create_account.dart';
+import 'package:saifu/widgets/custom_button.dart';
 
 // Screen for creating an User Account
 

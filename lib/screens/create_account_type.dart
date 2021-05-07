@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sip_3_mobile/screens/create_kira_account.dart';
+import 'package:saifu/screens/create_kira_account.dart';
 
 class CreateAccountType extends StatefulWidget {
   final String type;

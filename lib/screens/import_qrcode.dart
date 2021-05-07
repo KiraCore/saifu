@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sacco/sacco.dart';
 import 'package:sacco/wallet.dart';
-import 'package:sip_3_mobile/constants.dart';
-import 'package:sip_3_mobile/models/account.dart';
-import 'package:sip_3_mobile/screens/main_interface.dart';
-import 'package:sip_3_mobile/widgets/custom_button.dart';
+import 'package:saifu/constants.dart';
+import 'package:saifu/models/account.dart';
+import 'package:saifu/screens/main_interface.dart';
+import 'package:saifu/widgets/custom_button.dart';
 
 const flashOn = 'FLASH ON';
 const flashOff = 'FLASH OFF';

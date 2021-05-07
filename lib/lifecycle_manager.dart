@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sip_3_mobile/main.dart';
-import 'package:sip_3_mobile/screens/login.dart';
+import 'package:saifu/main.dart';
+import 'package:saifu/screens/login.dart';
 
 class MobileLifeCycle extends StatefulWidget {
   final Widget child;

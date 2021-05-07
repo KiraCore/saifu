@@ -7,9 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:local_auth/error_codes.dart' as auth_error;
 import 'package:local_auth/local_auth.dart';
-import 'package:sip_3_mobile/constants.dart';
-import 'package:sip_3_mobile/screens/main_interface.dart';
-import 'package:sip_3_mobile/widgets/password_keyboard.dart';
+import 'package:saifu/constants.dart';
+import 'package:saifu/screens/main_interface.dart';
+import 'package:saifu/widgets/password_keyboard.dart';
 
 class Login extends StatefulWidget {
   @override

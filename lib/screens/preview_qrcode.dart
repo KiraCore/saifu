@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:sacco/sacco.dart';
-import 'package:sip_3_mobile/widgets/signedQRCode.dart';
+import 'package:saifu/widgets/signedQRCode.dart';
 
 // ignore: must_be_immutable
 class PreviewQrCode extends StatefulWidget {

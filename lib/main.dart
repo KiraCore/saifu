@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sip_3_mobile/lifecycle_manager.dart';
-import 'package:sip_3_mobile/screens/login.dart';
+import 'package:saifu/lifecycle_manager.dart';
+import 'package:saifu/screens/login.dart';
 import 'screens/onboarding.dart';
 
 void main() {

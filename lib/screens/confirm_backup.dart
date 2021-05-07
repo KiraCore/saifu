@@ -2,10 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sacco/sacco.dart';
-import 'package:sip_3_mobile/constants.dart';
-import 'package:sip_3_mobile/models/account.dart';
-import 'package:sip_3_mobile/screens/main_interface.dart';
-import 'package:sip_3_mobile/widgets/custom_button.dart';
+import 'package:saifu/constants.dart';
+import 'package:saifu/models/account.dart';
+import 'package:saifu/screens/main_interface.dart';
+import 'package:saifu/widgets/custom_button.dart';
 
 // ignore: must_be_immutable
 class ConfirmBackup extends StatefulWidget {

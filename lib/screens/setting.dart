@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sip_3_mobile/screens/change_password.dart';
+import 'package:saifu/screens/change_password.dart';
 
 class Setting extends StatefulWidget {
   @override

@@ -5,7 +5,7 @@ import 'package:encryptions/encryptions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sip_3_mobile/constants.dart';
+import 'package:saifu/constants.dart';
 
 class ChanagePasswordModal extends StatefulWidget {
   const ChanagePasswordModal({

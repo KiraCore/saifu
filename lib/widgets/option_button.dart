@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
-import 'package:sip_3_mobile/screens/import_qrcode.dart';
-import 'package:sip_3_mobile/widgets/create_account.dart';
-import 'package:sip_3_mobile/widgets/custom_button.dart';
+import 'package:saifu/screens/import_qrcode.dart';
+import 'package:saifu/widgets/create_account.dart';
+import 'package:saifu/widgets/custom_button.dart';
 
 class FloatingButton extends StatefulWidget {
   final option;

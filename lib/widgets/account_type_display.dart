@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share/share.dart';
-import 'package:sip_3_mobile/constants.dart';
-import 'package:sip_3_mobile/models/account.dart';
-import 'package:sip_3_mobile/screens/qrcode_scan.dart';
-import 'package:sip_3_mobile/widgets/custom_button.dart';
+import 'package:saifu/constants.dart';
+import 'package:saifu/models/account.dart';
+import 'package:saifu/screens/qrcode_scan.dart';
+import 'package:saifu/widgets/custom_button.dart';
 
 // ignore: must_be_immutable
 class AccountTypeDisplay extends StatefulWidget {

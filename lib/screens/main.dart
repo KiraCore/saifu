@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
-import 'package:sip_3_mobile/constants.dart';
-import 'package:sip_3_mobile/models/account.dart';
-import 'package:sip_3_mobile/widgets/account_type_display.dart';
-import 'package:sip_3_mobile/widgets/alert_dialog.dart';
+import 'package:saifu/constants.dart';
+import 'package:saifu/models/account.dart';
+import 'package:saifu/widgets/account_type_display.dart';
+import 'package:saifu/widgets/alert_dialog.dart';
 
 class Main extends StatefulWidget {
   @override

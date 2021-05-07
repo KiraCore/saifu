@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:sip_3_mobile/screens/confirm_backup.dart';
-import 'package:sip_3_mobile/widgets/custom_button.dart';
+import 'package:saifu/screens/confirm_backup.dart';
+import 'package:saifu/widgets/custom_button.dart';
 
 class CreateKiraAccount extends StatefulWidget {
   @override

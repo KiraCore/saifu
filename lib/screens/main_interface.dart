@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sip_3_mobile/screens/main.dart';
-import 'package:sip_3_mobile/screens/setting.dart';
-import 'package:sip_3_mobile/widgets/option_button.dart';
+import 'package:saifu/screens/main.dart';
+import 'package:saifu/screens/setting.dart';
+import 'package:saifu/widgets/option_button.dart';
 
 // ignore: must_be_immutable
 class MainInterface extends StatefulWidget {

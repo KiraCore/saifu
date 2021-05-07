@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:sip_3_mobile/models/account.dart';
-import 'package:sip_3_mobile/screens/create_kira_account.dart';
-import 'package:sip_3_mobile/screens/main_interface.dart';
+import 'package:saifu/models/account.dart';
+import 'package:saifu/screens/create_kira_account.dart';
+import 'package:saifu/screens/main_interface.dart';
 
 // ignore: must_be_immutable
 class CreateAccount extends StatefulWidget {
