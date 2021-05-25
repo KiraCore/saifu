@@ -28,7 +28,7 @@ class Numpad extends StatelessWidget {
     } else {
       effectiveChild = Text(
         displayNum.toString(),
-        style: TextStyle(fontSize: buttonTextSize, color: textColor),
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: buttonTextSize, color: textColor),
       );
     }
     return Expanded(
@@ -36,7 +36,7 @@ class Numpad extends StatelessWidget {
         padding: const EdgeInsets.all(5.0),
         child: Container(
           padding: _buttonPadding(),
-          decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, boxShadow: [
+          decoration: BoxDecoration(color: Colors.white, shape: BoxShape.rectangle, boxShadow: [
             BoxShadow(
               color: Colors.black12,
               blurRadius: 0,
@@ -44,9 +44,8 @@ class Numpad extends StatelessWidget {
             )
           ]),
           child: FlatButton(
-              shape: CircleBorder(
-                side: BorderSide(color: Colors.black),
-              ),
+              highlightColor: Colors.white,
+              splashColor: Colors.white,
               child: effectiveChild,
               color: buttonColor,
               onPressed: () => {
@@ -81,7 +80,15 @@ class Numpad extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
-              child: enabledBiometric ? Container(padding: _buttonPadding(), child: FlatButton(shape: CircleBorder(side: BorderSide.none), color: buttonColor, child: Icon(Icons.fingerprint), onPressed: () => authenticationSelected())) : Container(padding: _buttonPadding(), child: FlatButton(shape: CircleBorder(side: BorderSide.none), color: buttonColor, child: Container(), onPressed: () {})),
+              child: enabledBiometric
+                  ? Container(padding: _buttonPadding(), child: FlatButton(shape: CircleBorder(side: BorderSide.none), color: buttonColor, child: Icon(Icons.fingerprint), onPressed: () => authenticationSelected()))
+                  : Container(
+                      padding: _buttonPadding(),
+                      child: FlatButton(
+                          child: Container(
+                            color: Colors.transparent,
+                          ),
+                          onPressed: () {})),
             ),
             _buildNumButton(context: context, displayNum: 0),
             _buildNumButton(

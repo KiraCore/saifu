@@ -73,97 +73,100 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20, top: 50, bottom: 20, right: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                "Saifu",
-                style: TextStyle(fontSize: 40, color: Colors.black),
-              ),
-              Text(
-                "Wallet.",
-                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: Colors.black),
-              ),
-              Expanded(
-                flex: 1,
+        backgroundColor: Colors.white,
+        body: SafeArea(
+            child: Padding(
+                padding: const EdgeInsets.only(top: 0),
                 child: Container(
-                  color: Colors.white,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "Enter your pincode or biometrics to gain access",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.normal),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        child: Wrap(
-                          direction: Axis.horizontal,
-                          alignment: WrapAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 300,
-                              height: 50,
-                              child: ClipRRect(
-                                child: Container(
-                                  child: TextField(
-                                    controller: _controller,
-                                    textAlign: TextAlign.center,
-                                    obscureText: true,
-                                    readOnly: true,
-                                    keyboardType: TextInputType.number,
-                                    enableInteractiveSelection: false,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      focusedBorder: OutlineInputBorder(),
-                                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[500], width: 1.0)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                  flex: 2,
-                  child: Align(
-                    child: AspectRatio(
-                      aspectRatio: 1 / 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: Container(
-                          child: Numpad(
-                            enabledBiometric: _enabledBiometric,
-                            controller: _controller,
-                            buttonTextSize: 30,
-                            textColor: Colors.black,
-                            buttonColor: Colors.white,
-                            authenticationSelected: () => _authenticate(),
+                    child: Column(children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            "saifu",
+                            style: TextStyle(fontSize: 50, color: Colors.black),
                           ),
-                        ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Icon(Icons.maximize_rounded),
+                        ],
                       ),
                     ),
-                  ))
-            ],
-          ),
-        ),
-      ),
-    );
+                  ),
+                  Expanded(
+                      flex: 3,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+                          child: Container(
+                              color: Colors.grey[100],
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center, children: [
+                                Container(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "Enter your pincode or biometric to gain access",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(fontSize: 16, color: Colors.black),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        child: Wrap(
+                                          direction: Axis.horizontal,
+                                          children: [
+                                            SizedBox(
+                                              width: 300,
+                                              height: 50,
+                                              child: ClipRRect(
+                                                child: Container(
+                                                  color: Colors.white,
+                                                  child: TextField(
+                                                    controller: _controller,
+                                                    textAlign: TextAlign.center,
+                                                    obscureText: true,
+                                                    readOnly: true,
+                                                    keyboardType: TextInputType.number,
+                                                    enableInteractiveSelection: false,
+                                                    decoration: InputDecoration(
+                                                      border: InputBorder.none,
+                                                      focusedBorder: OutlineInputBorder(),
+                                                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 1.0)),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.all(35.0),
+                                    child: Align(
+                                        child: AspectRatio(
+                                            aspectRatio: 1 / 1,
+                                            child: Container(
+                                                child: Numpad(
+                                              enabledBiometric: _enabledBiometric,
+                                              controller: _controller,
+                                              buttonTextSize: 30,
+                                              textColor: Colors.black,
+                                              buttonColor: Colors.white,
+                                              authenticationSelected: () => _authenticate(),
+                                            )))))
+                              ]))))
+                ])))));
   }
 }

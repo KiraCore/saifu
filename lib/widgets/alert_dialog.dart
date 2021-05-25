@@ -5,13 +5,10 @@ Future<String> createAlertDialog(BuildContext context) {
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Are you sure you want to delete?"),
-              Text('This action cannot be undone'),
-            ],
-          ),
+          content: Column(mainAxisSize: MainAxisSize.min, children: [
+            Text("Are you sure you want to delete?"),
+            Text('This action cannot be undone'),
+          ]),
           actions: <Widget>[
             FlatButton(
               child: Text(

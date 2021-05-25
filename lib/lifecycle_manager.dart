@@ -60,7 +60,7 @@ class _MobileLifeCycleState extends State<MobileLifeCycle> with WidgetsBindingOb
       theme: ThemeData(
           // splashColor: Colors.purple,
           //highlightColor: Colors.purple,
-          accentColor: Colors.purple,
+          accentColor: Colors.grey,
           primaryColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           textTheme: GoogleFonts.arimoTextTheme(Theme.of(context).textTheme.apply(
