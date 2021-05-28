@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:sacco/sacco.dart';
+import 'package:saifu/tx_offline_signer_mobile.dart';
 import 'package:saifu/widgets/signedQRCode.dart';
 
 // ignore: must_be_immutable
@@ -21,6 +22,7 @@ class PreviewQrCode extends StatefulWidget {
 }
 
 class _PreviewQrCodeState extends State<PreviewQrCode> {
+  String transcationData;
   TextEditingController txtController = new TextEditingController();
 
   @override
@@ -43,7 +45,6 @@ class _PreviewQrCodeState extends State<PreviewQrCode> {
       data = data + dataValue;
     }
     var jsondata = jsonDecode(data);
-    print(jsondata);
     widget.jsondata = {
       'memo': jsondata['memo'],
       'chainID': jsondata['chain_id'],
@@ -57,7 +58,7 @@ class _PreviewQrCodeState extends State<PreviewQrCode> {
     };
 
     setState(() {
-      txtController.text = data;
+      transcationData = data;
     });
   }
 
@@ -257,7 +258,7 @@ class _PreviewQrCodeState extends State<PreviewQrCode> {
             onPressed: () {
               showAlertDialog(BuildContext context) {
                 AlertDialog alert = AlertDialog(
-                  content: Container(width: 500, child: Text(txtController.text)),
+                  content: Container(width: 500, child: Text(transcationData)),
                 );
                 showDialog(
                   context: context,
@@ -327,26 +328,8 @@ class _PreviewQrCodeState extends State<PreviewQrCode> {
                                   style: ButtonStyle(
                                     overlayColor: MaterialStateProperty.all(Colors.transparent),
                                   ),
-                                  onPressed: () async {
-                                    final networkInfo = NetworkInfo(
-                                      bech32Hrp: "kira",
-                                      lcdUrl: "",
-                                    );
-                                    String newphrases = widget.mnemonic;
-                                    final mnemonic = newphrases.split(" ");
-                                    final wallet = Wallet.derive(mnemonic, networkInfo);
-                                    var bodyData = txtController.text;
-                                    var bytes = utf8.encode(bodyData);
-                                    final signatureData = wallet.signTxData(bytes);
-                                    final pubKeyCompressed = wallet.ecPublicKey.Q.getEncoded(true);
-
-                                    final base64Signature = base64Encode(signatureData);
-                                    final base64PubKey = base64Encode(pubKeyCompressed);
-                                    final stdPublicKey = StdPublicKey(type: '/cosmos.crypto.secp256k1.PubKey', value: base64PubKey);
-                                    Map<String, dynamic> map = {
-                                      'signature': base64Signature,
-                                      'publicKey': stdPublicKey
-                                    };
+                                  onPressed: () {
+                                    var map = TranscationofflineSignerMobile.signMobileTxData(widget.mnemonic, transcationData, "kira");
                                     Navigator.pop(context);
                                     showModalBottomSheet(
                                         shape: RoundedRectangleBorder(

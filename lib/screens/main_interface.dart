@@ -148,7 +148,7 @@ class _MainInterfaceState extends State<MainInterface> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   Text(
-                                                    "Scan security words",
+                                                    "Scan existing security words",
                                                     style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500),
                                                   ),
                                                   Spacer(),
@@ -192,7 +192,7 @@ class _MainInterfaceState extends State<MainInterface> {
                                                       },
                                                       child: Row(mainAxisSize: MainAxisSize.min, children: [
                                                         Text(
-                                                          "Input security words",
+                                                          "Input existing security words",
                                                           style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500),
                                                         ),
                                                         Spacer(),
@@ -235,7 +235,7 @@ class _MainInterfaceState extends State<MainInterface> {
                                                       },
                                                       child: Row(mainAxisSize: MainAxisSize.min, children: [
                                                         Text(
-                                                          "Create security words",
+                                                          "Create new security words",
                                                           style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
                                                         ),
                                                         Spacer(),
