@@ -49,7 +49,7 @@ class CeateLogin extends StatelessWidget {
                   color: Colors.grey.withOpacity(0.2),
                   spreadRadius: 1,
                   blurRadius: 10,
-                  offset: Offset(0, 3), 
+                  offset: Offset(0, 3),
                 ),
               ],
             ),
@@ -62,6 +62,7 @@ class CeateLogin extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class CreateAccountForm extends StatefulWidget {
   bool loading = false;
   @override
@@ -101,7 +102,8 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
   Future<void> _authenticate() async {
     bool authenticated = false;
     try {
-      authenticated = await auth.authenticateWithBiometrics(localizedReason: 'Enable biometric authentication', useErrorDialogs: true, stickyAuth: false);
+      //authenticated = await auth.authenticate(localizedReason: 'Enable biometric authentication', useErrorDialogs: true, stickyAuth: false);
+      authenticated = await auth.authenticate(localizedReason: 'Enable biometric authentication', useErrorDialogs: true, stickyAuth: false, biometricOnly: true);
     } on PlatformException catch (e) {
       print('Failed with error code: ${e.code}');
       print(e.message);

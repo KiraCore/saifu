@@ -116,7 +116,6 @@ class _MainState extends State<Main> {
                                                       context: context,
                                                       builder: (context) => AccountTypeDisplay(
                                                             type: accountState[index].type,
-                                                            ethvatar: accountState[index].ethvatar,
                                                             pubkey: accountState[index].pubkey,
                                                             privkey: accountState[index].privkey,
                                                             mnemonic: accountState[index].mnemonic,

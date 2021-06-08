@@ -265,7 +265,7 @@ class _ImportQrcodeScannerState extends State<ImportQrcodeScanner> {
                                                             if (isValid) {
                                                               final mnemonic = qrData.split(" ");
                                                               final wallet = Wallet.derive(mnemonic, networkInfo);
-                                                              accountState.add(Account(ethvatar: 'New Kira Account', type: 'KIRA', pubkey: wallet.bech32Address, privkey: wallet.privateKey.toString(), mnemonic: qrData));
+                                                              accountState.add(Account( type: 'KIRA', pubkey: wallet.bech32Address, privkey: wallet.privateKey.toString(), mnemonic: qrData));
                                                               try {
                                                                 final String encodeData = Account.encodeAccounts(accountState);
                                                                 await storage.write(key: 'database', value: encodeData);

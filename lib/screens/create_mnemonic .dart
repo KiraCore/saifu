@@ -27,6 +27,7 @@ class _CreateMnemonicState extends State<CreateMnemonic> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, watch, _) {
+      // ignore: invalid_use_of_protected_member
       final accountState = watch(accountListProvider).state;
       return Scaffold(
           backgroundColor: Colors.white,
@@ -334,7 +335,7 @@ class _CreateMnemonicState extends State<CreateMnemonic> {
     var newphrases = mnemonicString.replaceAll(new RegExp(r'[^\w\s]+'), '');
 
     try {
-      accountState.add(Account(ethvatar: 'New Kira Account', type: 'KIRA', pubkey: wallet.bech32Address, privkey: wallet.privateKey.toString(), mnemonic: newphrases));
+      accountState.add(Account(type: 'KIRA', pubkey: wallet.bech32Address, privkey: wallet.privateKey.toString(), mnemonic: newphrases));
       final String encodeData = Account.encodeAccounts(accountState);
       await storage.write(key: 'database', value: encodeData);
       Navigator.of(context).pushAndRemoveUntil(

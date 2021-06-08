@@ -25,7 +25,8 @@ class _LoginState extends State<Login> {
   Future<void> _authenticate() async {
     bool authenticated = false;
     try {
-      authenticated = await auth.authenticateWithBiometrics(localizedReason: 'LoginPage with authentication', useErrorDialogs: true, stickyAuth: false);
+      // depreciated  authenticated = await auth.authenticateWithBiometrics(localizedReason: 'LoginPage with authentication', useErrorDialogs: true, stickyAuth: false);
+      authenticated = await auth.authenticate(localizedReason: 'LoginPage with authentication', useErrorDialogs: true, stickyAuth: false, biometricOnly: true);
     } on PlatformException catch (e) {
       if (e.code == auth_error.notAvailable) {
         print('Failed with error code: ${e.code}');

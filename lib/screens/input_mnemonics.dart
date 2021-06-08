@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bip39/bip39.dart' as bip39;
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:sacco/network_info.dart';
 import 'package:sacco/wallet.dart';
 import 'package:saifu/constants.dart';
@@ -53,8 +55,18 @@ class _InputMnemonicState extends State<InputMnemonic> {
             ],
           ),
           Icon(Icons.horizontal_rule_rounded),
-          SizedBox(
-            height: 10,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              padding: EdgeInsets.all(2),
+              decoration: new BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+              child: SvgPicture.string(
+                Jdenticon.toSvg(menmonicTextController.text),
+                fit: BoxFit.contain,
+                height: 150,
+                width: 150,
+              ),
+            ),
           ),
           Row(
             children: <Widget>[
@@ -63,6 +75,11 @@ class _InputMnemonicState extends State<InputMnemonic> {
                   onFieldSubmitted: (_) {},
                   keyboardType: TextInputType.text,
                   controller: menmonicTextController,
+                  onChanged: (val) {
+                    setState(() {
+                      isValid = true;
+                    });
+                  },
                   decoration: InputDecoration(
                       hintText: "Ensure 12 or more words separated by spacing",
                       floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -102,7 +119,7 @@ class _InputMnemonicState extends State<InputMnemonic> {
                       if (isValid) {
                         final mnemonic = menmonicTextController.text.split(" ");
                         final wallet = Wallet.derive(mnemonic, networkInfo);
-                        accountState.add(Account(ethvatar: 'New Kira Account', type: 'KIRA', pubkey: wallet.bech32Address, privkey: wallet.privateKey.toString(), mnemonic: menmonicTextController.text));
+                        accountState.add(Account( type: 'KIRA', pubkey: wallet.bech32Address, privkey: wallet.privateKey.toString(), mnemonic: menmonicTextController.text));
                         try {
                           final String encodeData = Account.encodeAccounts(accountState);
                           await storage.write(key: 'database', value: encodeData);

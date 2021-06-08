@@ -10,12 +10,11 @@ import 'package:saifu/screens/qrcode_scan.dart';
 
 // ignore: must_be_immutable
 class AccountTypeDisplay extends StatefulWidget {
-  String ethvatar;
   String pubkey;
   String type;
   String privkey;
   String mnemonic;
-  AccountTypeDisplay({Key key, this.ethvatar, this.pubkey, this.type, this.privkey, this.mnemonic}) : super(key: key);
+  AccountTypeDisplay({Key key, this.pubkey, this.type, this.privkey, this.mnemonic}) : super(key: key);
 
   @override
   _AccountTypeDisplayState createState() => _AccountTypeDisplayState();
@@ -54,14 +53,19 @@ class _AccountTypeDisplayState extends State<AccountTypeDisplay> {
                       title: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Container(
-                          color: Colors.white,
-                          child: Padding(
                             padding: const EdgeInsets.all(0.0),
-                            child: TextField(
+                            child: Text(
+                              accountNameController.text,
+                              textAlign: TextAlign.center,
+                              textDirection: TextDirection.ltr,
+                            )
+                            /*
+                            
+                            TextField(
                               controller: accountNameController,
                               textAlign: TextAlign.center,
                               textDirection: TextDirection.ltr,
-                              /*
+                              
                             onSubmitted: (value) async {
                               accountState.remove(accountState[accountState.indexWhere((element) => element.pubkey == widget.pubkey)]);
                               accountState.add(Account(ethvatar: value, privkey: widget.privkey, pubkey: widget.pubkey, type: _selectedText, mnemonic: widget.mnemonic));
@@ -70,11 +74,11 @@ class _AccountTypeDisplayState extends State<AccountTypeDisplay> {
                               
                               //Navigator.pop(context, true);
                             },
-                            */
+                        
                               decoration: InputDecoration(contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0), hintText: "Account Name", border: InputBorder.none, focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[300]), borderRadius: BorderRadius.circular(10.0))),
                             ),
-                          ),
-                        ),
+                                */
+                            ),
                       ),
                       trailing: AccountTypes.typesSupported.indexWhere((element) => element.type == widget.type) == -1
                           ? AbsorbPointer(
@@ -100,7 +104,7 @@ class _AccountTypeDisplayState extends State<AccountTypeDisplay> {
                                                   _selectedText = val;
                                                 });
                                                 accountState.remove(accountState[accountState.indexWhere((element) => element.pubkey == widget.pubkey)]);
-                                                accountState.add(Account(ethvatar: accountNameController.text, privkey: widget.privkey, pubkey: widget.pubkey, type: _selectedText));
+                                                accountState.add(Account(privkey: widget.privkey, pubkey: widget.pubkey, type: _selectedText));
                                                 await storage.write(key: 'database', value: Account.encodeAccounts(accountState));
                                               })))))
                           : PopupMenuButton<AccountOptions>(
