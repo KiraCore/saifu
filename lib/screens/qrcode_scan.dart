@@ -100,134 +100,111 @@ class _QrCodePageState extends State<QrCodePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: Colors.white,
-        body: SafeArea(
-            child: Expanded(
-                flex: 5,
-                child: Stack(children: [
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text(
-                        'Scan the QR code inside the frame',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                        ),
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+                child: SizedBox(
+              child: Container(
+                color: Colors.grey[100],
+                child: Stack(
+                  children: [
+                    QRView(
+                      key: qrKey,
+                      onQRViewCreated: _onQRViewCreated,
+                      overlay: QrScannerOverlayShape(
+                        borderColor: Colors.white,
                       ),
                     ),
-                  ),
-                  QRView(
-                    key: qrKey,
-                    onQRViewCreated: _onQRViewCreated,
-                    overlay: QrScannerOverlayShape(
-                      borderColor: Colors.red,
-                    ),
-                  ),
-                  Positioned(
-                    right: 0.0,
-                    child: Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            if (controller != null) {
-                              controller.toggleFlash();
-                              if (_isFlashOn(flashState)) {
-                                setState(() {
-                                  flashState = flashOff;
-                                });
-                              } else {
-                                setState(() {
-                                  flashState = flashOn;
-                                });
-                              }
-                            }
-                          },
-                          icon: Icon(
-                            Icons.flash_on,
-                            color: Colors.white,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            if (controller != null) {
-                              controller.flipCamera();
-                              if (_isBackCamera(cameraState)) {
-                                setState(() {
-                                  cameraState = frontCamera;
-                                });
-                              } else {
-                                setState(() {
-                                  cameraState = backCamera;
-                                });
-                              }
-                            }
-                          },
-                          icon: Icon(
-                            Icons.flip_camera_ios_rounded,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
+                    Positioned(
+                      right: 0.0,
+                      child: Row(
                         children: [
-                          Text(
-                            'Scan the QR code inside the frame',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20,
+                          IconButton(
+                            onPressed: () {
+                              if (controller != null) {
+                                controller.toggleFlash();
+                                if (_isFlashOn(flashState)) {
+                                  setState(() {
+                                    flashState = flashOff;
+                                  });
+                                } else {
+                                  setState(() {
+                                    flashState = flashOn;
+                                  });
+                                }
+                              }
+                            },
+                            icon: Icon(
+                              Icons.flash_on,
                               color: Colors.white,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Icon(
-                            Icons.horizontal_rule_rounded,
-                            color: Colors.white,
+                          IconButton(
+                            onPressed: () {
+                              if (controller != null) {
+                                controller.flipCamera();
+                                if (_isBackCamera(cameraState)) {
+                                  setState(() {
+                                    cameraState = frontCamera;
+                                  });
+                                } else {
+                                  setState(() {
+                                    cameraState = backCamera;
+                                  });
+                                }
+                              }
+                            },
+                            icon: Icon(
+                              Icons.flip_camera_ios_rounded,
+                              color: Colors.white,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              spreadRadius: 1,
-                              blurRadius: 10,
-                              offset: Offset(0, 3),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Scan the QR code inside the frame',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
-                          ],
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                          Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Expanded(
-                                  flex: 3,
-                                  child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, mainAxisAlignment: MainAxisAlignment.center, children: [
+                            Icon(
+                              Icons.horizontal_rule_rounded,
+                              color: Colors.white,
+                            ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(35),
+                              child: Container(
+                                color: Colors.white,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
                                     Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 10),
-                                        child: Column(children: [
+                                      padding: const EdgeInsets.only(top: 20),
+                                      child: Column(
+                                        children: [
                                           CircularProgressIndicator(
                                             valueColor: new AlwaysStoppedAnimation<Color>(Colors.black),
                                           ),
@@ -235,32 +212,46 @@ class _QrCodePageState extends State<QrCodePage> {
                                             "${percentage.toStringAsFixed(0)}" + "%",
                                             textAlign: TextAlign.center,
                                           ),
-                                          Center(
-                                              child: Padding(
-                                                  padding: const EdgeInsets.all(20.0),
-                                                  child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius: BorderRadius.circular(35),
-                                                        boxShadow: [
-                                                          BoxShadow(
-                                                            color: Colors.grey.withOpacity(0.3),
-                                                            spreadRadius: 2,
-                                                            blurRadius: 7,
-                                                            offset: Offset(0, 3),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      child: IconButton(
-                                                          onPressed: () => Navigator.pop(context),
-                                                          icon: Icon(
-                                                            Icons.close_rounded,
-                                                            color: Colors.black,
-                                                          )))))
-                                        ]))
-                                  ])))
-                        ]))
-                  ])
-                ]))));
+                                        ],
+                                      ),
+                                    ),
+                                    Center(
+                                        child: Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(35),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey.withOpacity(0.3),
+                                                      spreadRadius: 2,
+                                                      blurRadius: 7,
+                                                      offset: Offset(0, 3),
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: IconButton(
+                                                    onPressed: () => Navigator.pop(context),
+                                                    icon: Icon(
+                                                      Icons.close_rounded,
+                                                      color: Colors.black,
+                                                    )))))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )),
+          ],
+        ),
+      ),
+    );
   }
 }

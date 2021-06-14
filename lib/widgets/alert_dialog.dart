@@ -10,7 +10,7 @@ Future<String> createAlertDialog(BuildContext context) {
             Text('This action cannot be undone'),
           ]),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
                 "Cancel",
                 style: TextStyle(color: Colors.black),
@@ -19,7 +19,7 @@ Future<String> createAlertDialog(BuildContext context) {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
+            TextButton(
                 child: Text(
                   "Delete",
                   style: TextStyle(color: Colors.red),

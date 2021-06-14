@@ -32,6 +32,7 @@ class _InputMnemonicState extends State<InputMnemonic> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, watch, _) {
+      // ignore: invalid_use_of_protected_member
       final accountState = watch(accountListProvider).state;
       return Padding(
         padding: EdgeInsets.only(
@@ -119,7 +120,7 @@ class _InputMnemonicState extends State<InputMnemonic> {
                       if (isValid) {
                         final mnemonic = menmonicTextController.text.split(" ");
                         final wallet = Wallet.derive(mnemonic, networkInfo);
-                        accountState.add(Account( type: 'KIRA', pubkey: wallet.bech32Address, privkey: wallet.privateKey.toString(), mnemonic: menmonicTextController.text));
+                        accountState.add(Account(type: 'KIRA', pubkey: wallet.bech32Address, privkey: wallet.privateKey.toString(), mnemonic: menmonicTextController.text));
                         try {
                           final String encodeData = Account.encodeAccounts(accountState);
                           await storage.write(key: 'database', value: encodeData);

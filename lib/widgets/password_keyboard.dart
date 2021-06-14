@@ -43,11 +43,11 @@ class Numpad extends StatelessWidget {
               spreadRadius: 0,
             )
           ]),
-          child: FlatButton(
-              highlightColor: Colors.white,
-              splashColor: Colors.white,
+          child: TextButton(
+              style: TextButton.styleFrom(
+                primary: buttonColor,
+              ),
               child: effectiveChild,
-              color: buttonColor,
               onPressed: () => {
                     if (passNum == -2)
                       {
@@ -81,10 +81,10 @@ class Numpad extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: enabledBiometric
-                  ? Container(padding: _buttonPadding(), child: FlatButton(shape: CircleBorder(side: BorderSide.none), color: buttonColor, child: Icon(Icons.fingerprint), onPressed: () => authenticationSelected()))
+                  ? Container(padding: _buttonPadding(), child: TextButton(style: TextButton.styleFrom(shape: CircleBorder(side: BorderSide.none), primary: Colors.black, backgroundColor: Colors.white), child: Icon(Icons.fingerprint), onPressed: () => authenticationSelected()))
                   : Container(
                       padding: _buttonPadding(),
-                      child: FlatButton(
+                      child: TextButton(
                           child: Container(
                             color: Colors.transparent,
                           ),
@@ -97,6 +97,7 @@ class Numpad extends StatelessWidget {
                 icon: Icon(
                   Icons.clear,
                   size: buttonTextSize,
+                  color: Colors.black,
                 )),
           ],
         ),

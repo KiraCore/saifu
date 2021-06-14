@@ -1,12 +1,14 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+//import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:saifu/screens/qrcode_scan.dart';
 import 'package:share/share.dart';
 import 'package:saifu/constants.dart';
 import 'package:saifu/models/account.dart';
-import 'package:saifu/screens/qrcode_scan.dart';
 
 // ignore: must_be_immutable
 class AccountTypeDisplay extends StatefulWidget {
@@ -205,8 +207,7 @@ class _AccountTypeDisplayState extends State<AccountTypeDisplay> {
                                 style: ButtonStyle(
                                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                                 ),
-                                onPressed: () {
-                                  Navigator.pop(context);
+                                onPressed: () async {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => QrCodePage(
                                             type: widget.type,
@@ -214,6 +215,31 @@ class _AccountTypeDisplayState extends State<AccountTypeDisplay> {
                                             pubkey: widget.pubkey,
                                             mnemonic: widget.mnemonic,
                                           )));
+                                  /*
+                                  Map<Permission, PermissionStatus> statuses = await [
+                                    Permission.camera,
+                                    Permission.microphone,
+                                  ].request();
+
+                                  if (statuses[Permission.camera].isGranted) {
+                                    print("Camera has permissions");
+                                    Navigator.pop(context);
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => QrCodePage(
+                                              type: widget.type,
+                                              privkey: widget.privkey,
+                                              pubkey: widget.pubkey,
+                                              mnemonic: widget.mnemonic,
+                                            )));
+                                  } else {
+                                    print("we need permission");
+                                  }
+                                  var cameraStatus = await Permission.camera.status;
+                                  print(cameraStatus);
+
+                         
+
+                                          */
                                 },
                                 child: Row(mainAxisSize: MainAxisSize.min, children: [
                                   Text(

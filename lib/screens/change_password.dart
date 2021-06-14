@@ -100,7 +100,7 @@ class _ChanagePasswordModalState extends State<ChanagePasswordModal> {
           SizedBox(
             height: 10,
           ),
-          FlatButton(
+          TextButton(
             child: Text('Confirm New Pincode'),
             onPressed: () async {
               _formKeys[0].currentState.save();
